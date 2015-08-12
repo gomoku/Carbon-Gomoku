@@ -9,3 +9,5 @@ Programming language: C++
 IDE: Visual Studio 6.0 project (works also in 7.1) 
 Year: 2002 (the project is over 13 years old!)
 Notes: First time on any source code repository.
+
+![alt text](Documentation_PL/screen1.gif "Description goes here")

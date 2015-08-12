@@ -7,5 +7,5 @@ Email:  mczard@poczta.onet.pl
 Country: Poland
 Programming language: C++
 IDE: Visual Studio 6.0 project (works also in 7.1) 
-Year: 2002 (the project has over 13 years!)
+Year: 2002 (the project is over 13 years old!)
 Notes: First time on any source code repository.

@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Wyniki testowania.
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Testowanie i uruchamianie</H1>
+<HR>
+
+<H2>Interface użytkownika</H2>
+Wszystkie błędy, które powstały w trakcie tworzenia inteface'u użytkownika były proste do wykrycia
+i ich usunięcie nie sprawiało problemów.
+
+<H2>Błędy, które występowały w trakcie tworzenia klasy AICarbon</H2>
+<UL>
+<LI>Podczas optymalizowania kodu i dodawania kolejnych ulepszeń, bardzo często występowały błędy braku spójności
+danych, które przejawiały się głupią grą komputera lub błędem wykonania. Aby szybko je wykrywać wbudowałem
+w program szereg asercji i funkcje sprawdzające spójność danych - funkcja bool check() sprawdza czy bieżąca
+zawartość tablicy nSt zgadza się ze stanem faktycznym.
+<LI>Innym, często pojawiającym się błędem było błędne ocanianie sytuacji jako wygranej / przegranej. W celu
+wykrywania takich sytuacji, a także w celu kontrolowania szybkości liczenia oraz efektywności odcięć wyrażonej
+w liczbie przeszukiwanych ruchów, wbudowałem w program okienko dialogowe, w którym algorytm sztucznej inteligencji
+wypisuje wyniki swojego działania, po każdym wykonanym ruchu.
+</UL>
+
+<H2>Profil dla algorytmu AICarbon</H2>
+Szybość działania jest bardzo ważna w przypadku algorytmu minimax. Profil programu wyznaczyłem ręcznie,
+ponieważ narzędzie wbudowane w środowisko VisualC++ daje niewiarygodne wyniki.
+<PRE>
+funkcja         czas
+----------------------
+_move / undo    55.8%
+generateCand    18.1%
+qsort           11.9%
+quickWinSearch   6.4%
+</PRE>
+
+<H2>Czas działania algorytmu AICarbon</H2>
+Czas działania rośnie wykładniczo wraz ze wzrostem głębokości przeszukiwania. Dla głębokości 8 i większych
+czas przestaje być akceptowalnie mały. Dla głębokości 7, na procesorze z zegarem 800MHz na wykonanie ruchu
+czekamy do kilku sekund.
+
+<H2>Zużycie pamięci</H2>
+Gdy nie toczy się gra, program zużywa ok. 1 MB. Uruchomienie gry z algorytmem AICarbon podwyższa tę wartość
+o ok. 1.5 MB. W najgorszym przypadku, gdy gra AICarbon z AICarbon zużycie pamięci wynosi ok. 4 MB.
+
+<H2>Siła programu</H2>
+Siłę programu testowałem na zwykłych ludziach, innych programach i w grach przez internet.
+<H3>Zwykli ludzi</H3>
+Przy przeszukiwaniu 6 ruchów do przodu nie mają szans.
+<H3>Inne programy</H3>
+Nie znalazłem w intenecie lepszego programu. Wszystkie wymienione programy ustawiałem na najwyższy poziom trudności, mimo
+to przegrywają z moim programem ustawionym na bardzo niskim poziomie trudności.<BR><BR>
+<TABLE BORDER>
+<TR><TH>Program<TH>Autor<TH>Źródło<TH>Poziom na którym wygrywa AICarbon (gdy nie zaczyna)
+<TR><TD>TIC 1.0 beta<TD>Paweł Pilc<TD>http://tempus.ii.uni.wroc.pl/~p_pelc<TD>2
+<TR><TD>Gomoku<TD>Andrzej Bartczak<TD>http://www.zsh.konin.pl/andrzej/gomoku.html<TD>1
+<TR><TD>Go-Moku 95<TD>Stas Drapkin<TD>Nieznane<TD>2
+<TR><TD><A HREF = "http://republika.pl/mczard/paulmoku.exe">Nguyen's Moku</A><TD>Daryl Smith, Miriam Raphael, Koji Noguchi, Poul Nguyen<TD>Nieznane<TD>2
+<TR><TD>Advanced Gomoku<TD>VertexLabs<TD>www.vertexlabs.com<TD>1
+<TR><TD>Java Gomoku Applet<TD>Nieznany<TD>http://boardgames.about.com/cs/onlinepente/<TD>1 (zaczynając)
+</TABLE>
+
+<BR><BR>
+Autor programu TIC 1.0 podaje listę programów, z którymi wygrywa jego program. Skoro mój wygrywa z TIC 1.0, więc
+zakładam, że wygrywa też z nimi:
+<PRE>
+    Nazwa Programu:       ver.      Autor:                  Komentarz:
+
+(a) MAKE5                 1.0       Chih-Hung Hsieh         Ppotrafi liczyć w tle
+(b) Rendzu                2.1       Dmitri Karpatchev       Wykorzystuje heurystyka konika
+(c) Tic Tac Toe           ?.?       Daniel L. Miller
+(d) Pente                 9.5       Mark Mammel (DOS)
+(e) GoMoku Narabe         2.0       P. S. Neeley
+(f) Five in a Row         0.2       Sverre H. Huseby
+(g) Five in a row         1.4.1     Lars Peter Jeppesen
+(h) Piątka                1.0       Przemek Skibiński       Oparty na wiedzy eksperckiej
+
+</PRE>
+
+<H3>Gra przez internet</H3>
+Testowałem mój program na serwerze Cronix (www.cronix.pl). Grając na poziomie 6 bez problemu
+radzi sobie z większością zawodników. Jednak znalazłem i godnego przeciwnika. Jedyną osobą,
+która sobie poradziła (a grałem z około 10 osobami) był człowiek o nicku Madmac_power, który
+dotychczas miał wygrane 15 gier i 1 przegraną. Mój program uległ mu 3 razy na 3 gry.
+
+
+</BODY>

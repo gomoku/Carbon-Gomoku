@@ -1,0 +1,67 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - algorytm AICarbon
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Algorytm AICarbon</H1>
+<HR>
+<H2>Pliki</H2>
+AICarbon.cpp, AICarbonMove.cpp, AICarbon.h
+
+<H2>Opis</H2>
+Zawiera definicję klasy AICarbon, która jest pochodną OXPlayer.
+
+<H2>Nowe typy danych</H2>
+
+<TABLE BORDER>
+<TR><TD><tt>OXMove</tt><TD>Wspólrzędne ruchu i jego wartość.
+<TR><TD><tt>OXCand</tt><TD>To samo co OXMove, ale zamiast wartości jest jej oszacowanie.
+<TR><TD><tt>OXCell</tt><TD>Stan pojedynczego pola na planszy.
+</TABLE>
+
+<H2>Opis OXCell</H2>
+<TABLE BORDER>
+<TR><TD><tt>OXPiece piece</tt><TD>Xawartość pola
+<TR><TD><tt>UCHAR   pattern[4][2]</tt><TD>Układ dla 4 kierunków i 2 graczy, kodowany na bitach.
+<TR><TD><tt>UCHAR   status1[4][2]</tt><TD>Statusy-jeden dla obu graczy i czterech kierunków.
+<TR><TD><tt>UCHAR   status4[2]</tt><TD>Statusy-cztery pola dla obu graczy.
+<TR><TD><tt>char    adj1, adj2</tt><TD>Czy w odległości 1 (adj1) lub 2 (adj2) znajduje się niepuste pole?
+<TR><TD><tt>void update1(int k)</tt><TD>Oblicza status-jeden kierunku k (0..3) na podstawie tablicy <tt>pattern</tt>
+<TR><TD><tt>void update4()</tt><TD>Oblicza status-cztery pola na podstwie tablicy <tt>status1</tt>
+<TR><TD><tt>short prior()</tt><TD>Zwraca oszacowanie wartości pola, które jest wykorzystywane do ustalania kolejności analizowania ruchów.
+</TABLE>
+
+<H2>Nowe pola klasy AICarbon</H2>
+<TABLE BORDER>
+<TR><TD VALIGN = TOP><pre>OXCell  cell[BSIZE][BSIZE];<TD>Tablica pól z marginesem o szerokosci 4, który pozwala uniknąć sprawdzania zakresów.
+<TR><TD VALIGN = TOP><pre>int     boardSize;<TD>Rozmiar planszy.
+<TR><TD VALIGN = TOP><pre>int     moveCount;<TD>Liczba wykonanych ruchów od początku gry.
+<TR><TD><pre>OXPiece who, opp;<TD>Aktualny i następny gracz.
+<TR><TD><pre>int     nSt[2][9];<TD>nSt[i][j] - liczba pól o statusie j gracza i.
+<TR><TD><pre>OXPoint upperLeftCand, lowerRightCand<TD>Lewe-górne i prawe-dolne ograniczenie dla przeszukiwania ruchów.
+<TR><TD><pre>OXPoint remMove[MAX_CELLS];<TD>Zapamiętuje kolejne ruchy.
+<TR><TD><pre>OXPoint remULCand[MAX_CELLS];<TD>Zapamiętuje <tt>upperLeftCand</tt>
+<TR><TD><pre>OXPoint remLRCand[MAX_CELLS];<TD>Zapamiętuje <tt>lowerRightCand</tt>
+<TR><TD><pre>HashTable table;<TD>Tablica transpozycji.
+<TR><TD><pre>int totalSearche, nSearched;<TD>Liczba przeszukanych ruchów w ogóle i w ostatniej kolejce.
+</TABLE>
+
+<H2>Nowe metody klasy AICarbon</H2>
+<TABLE BORDER>
+<TR><TD  VALIGN = TOP><PRE>void   _move(int x, int y);<TD>Wykonanie ruchu, współrzędne w przedziale 4..boardSize+3
+<TR><TD  VALIGN = TOP><PRE>void   init();<TD>Inicjacja tablic.
+<TR><TD  VALIGN = TOP><PRE>int    getRank(char cfg);<TD>Podaje liczbę punktów konfiguracji <tt>cfg</tt>, która jest wartością w tablicy CONFIG.
+<TR><TD  VALIGN = TOP><PRE>int    getPrior(UCHAR a, UCHAR b);<TD>Podaje priorytet układu, kodowanego bitowo.
+<TR><TD  VALIGN = TOP><PRE>UCHAR  getStatus4(UCHAR s0, UCHAR s1, UCHAR s2, UCHAR s3);<TD>Oblicza status-cztery na podstawie czterech statusów kierunków.
+<TR><TD  VALIGN = TOP><PRE>int    evaluate();<TD>Ocena bieżącej sytuacji.
+<TR><TD  VALIGN = TOP><PRE>OXMove minimax(int h, bool root, int alpha, int beta);<TD>Szuka najlepszego ruchu o wartości w przedziale alpha-beta, analizując h ruchów wprzód. Parametr root określa, czy jest to pierwsze wywołanie.
+<TR><TD  VALIGN = TOP><PRE>int    quickWinSearch();<TD>Szybkie znajdowanie zakończenia. Zwrot: niezero - sytuacja przesądzona, liczba dodatnia - liczba ruchów do wygranej, ujemna - minus liczba ruchów do przegranej.
+<TR><TD  VALIGN = TOP><PRE>void   generateCand(OXCand *cnd, int &nCnd);<TD>Tworzy listę <tt>nCnd</tt> elementową kandydatów na ruch w tablicy <tt>cnd</tt>.
+</TABLE>
+<BR>
+Makro FOR_EVERY_CAND(x, y) działa jak pętla, która wpisuje w zmienne x i y typu short kolejne propozycje ruchów.
+
+</BODY>

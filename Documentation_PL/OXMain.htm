@@ -1,0 +1,134 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Moduł główny
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Moduł główny</H1>
+<HR>
+
+<H2>Pliki</H2>
+OXMain.cpp
+
+<H2>Opis</H2>
+Moduł główny zawiera funkcje WinAPI okna głównego, okna dialogowego
+"NewGame" i "Log" oraz funkcje obsługujące zdarzenia w tych oknach. Wskaźnik
+<tt>currPlayer</tt>wskazuje na obiekt klasy <tt>AIPlayer</tt> reprezentujący
+gracza, który w danej chwili ma wykonać ruch. Jeżeli <tt>currPlayer==0</tt>
+to znaczy, że ruch należy do człowieka. Wtedy naciśnięcie lewego klawisza
+myszy w obszarze planszy powoduje wysłanie komunikatu użytkownika
+WM_PERFORM_MOVE, który powoduje wykonanie ruchu. W przypadku, gdy kolejny
+ruch należy do komputera, uruchomiany jest osobny wątek <tt>AIThreadProc</tt>,
+na którego zakończenie wysyłany jest komunikat WM_PERFORM_MOVE itd.
+
+<H2>Procedury okien</H2>
+<TABLE BORDER>
+
+<TR><TD VALIGN = TOP><PRE>LRESULT CALLBACK MainWndProc
+(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);</B>
+<TD>Procedura okna głównego.
+<TR><TD VALIGN = TOP><PRE>BOOL CALLBACK NewGameDialogProc
+(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);</B>
+<TD>Procedura okna dialogowego "NewGame".
+<TR><TD VALIGN = TOP><PRE>BOOL CALLBACK LogDialogProc
+(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+<TD>Procedura okna dialogowego "Log".
+
+</TABLE>
+
+<H2>Dane globalne dotyczące interface'u</H2>
+
+<TABLE BORDER>
+<TR><TD><PRE>const LPSTR lpszMainWndClassName<TD>Nazwa klasy okna.
+<TR><TD><PRE>const int   cellSize<TD>Rozmiar komórki planszy w pikselach.
+<TR><TD><PRE>HINSTANCE   ghInstance<TD>Uchwyt instancji programu.
+<TR><TD><PRE>HMENU       hMenu<TD>Uchwyt menu.
+<TR><TD><PRE>DWORD       aiThreadId<TD>Identyfikator wątku AI.
+<TR><TD><PRE>HANDLE      hAiThread<TD>Uchwyt wątku AI.
+<TR><TD><PRE>bool        aiThinking<TD>Czy komputer myśli w tej chwili?
+<TR><TD><PRE>HWND        hWndLog<TD>Uchwyt okna logowania.
+<TR><TD><PRE>RECT        clientRect<TD>Obszar okna
+<TR><TD><PRE>#define     clientWidth<TD>Szerokość okna
+<TR><TD><PRE>#define     clientHeight<TD>Wysokość okna
+
+</TABLE>
+
+<H2>Dane globalne dotyczące stanu gry</H2>
+
+<TABLE BORDER>
+<TR><TD><PRE>const int  boardSize;<TD>Rozmiar planszy.
+<TR><TD><PRE>const char playerName[][32];<TD>Nazwy algorytmów AI.
+<TR><TD><PRE>const int  playerCount;<TD>Liczba algorytmów AI.
+<TR><TD><PRE>OXGame     game;<TD>Stan gry.
+<TR><TD><PRE>AIPlayer   *playerO, *playerX<TD>Wskaźniki do graczy AI, wartość <tt>NULL</tt> oznacza człowieka.
+<TR><TD><PRE>AIPlayer   *currPlayer<TD>Wskazuje bieżącego gracza (równe <tt>playerO</tt> albo <tt>playerX</tt>).
+<TR><TD><PRE>int        iPlayerO, iPlayerX;<TD>Indeksy do tablicy nazw <tt>playerName</tt>.
+<TR><TD><PRE>int        oSearchDepth, oTimeLimit;<TD>Parametry dla gracza O: głębokość przeszukiwania, limit czasu.
+<TR><TD><PRE>int        xSearchDepth, xTimeLimit;<TD>Parametry dla gracza X.
+</TABLE>
+
+<H2>Funkcje modyfikujące stan gry</H2>
+
+<TABLE BORDER>
+<TR><TD VALIGN = TOP><PRE>void  NewPlayer(AIPlayer *&player, int playerIndex);<TD>Tworzy obiekt odpowiedniej klasy pochodnej <tt>AIPlayer</tt>, w zależności od <tt>playerIndex</tt>, który jest indeksem do tablicy <tt>playerName</tt>.
+<TR><TD VALIGN = TOP><PRE>void  StartNewGame(HWND hWnd);<TD>Rozpoczyna nową grę.
+<TR><TD VALIGN = TOP><PRE>void  PerformMove(HWND hWnd, int x, int y);<TD>Wykonuje ruch na pole (x, y).
+<TR><TD VALIGN = TOP><PRE>DWORD AIThreadProc(LPVOID param);<TD>Procedura wątku realizującego algorytm AI. Uchwyt okna głównego przekazywany jest przez <tt>param</tt>.
+</TABLE>
+
+<H2>Funkcje obsługujące zdarzenia WinAPI</H2>
+Parametr hWnd to zawsze uchwyt do okna głównego.
+
+<TABLE BORDER>
+<TR><TD VALIGN = TOP><PRE>void RestoreSize(HWND hWnd, RECT *pRect);
+<TD>Przywraca pRect poprawne wartości rozmiarów okna głównego.
+<TR><TD VALIGN = TOP><PRE>void RestoreSize(HWND hWnd);
+<TD>Przywraca poprawny rozmiar okna głównego.
+<TR><TD VALIGN = TOP><PRE>void OnCreate(HWND hWnd);
+<TD>Wywoływane w momencie uruchomienia programu.
+<TR><TD VALIGN = TOP><PRE>void OnCommand(HWND hWnd, WPARAM wParam);
+<TD>Użycie poleń z menu.
+<TR><TD VALIGN = TOP><PRE>void OnLeftClick(HWND hWnd, int x, int y);
+<TD>Naciśnięcie lewego klawisza myszy na planszy w punkcie (x, y).
+<TR><TD VALIGN = TOP><PRE>void OnRightClick(HWND hWnd, int x, int y);
+<TD>Używane do debuggowania.
+<TR><TD VALIGN = TOP><PRE>void OnPaint(HWND hWnd);
+<TD>Rysowanie planszy.
+<TR><TD VALIGN = TOP><PRE>void OnMove(HWND hWnd, int cx, int cy);
+<TD>Obsługa komunikatu użytkownika <tt>WM_PERFORM_MOVE</tt> - ruch na pole (cx, cy).
+<TR><TD VALIGN = TOP><PRE>void InvalidateCell(HWND hWnd, int cx, int cy);
+<TD>Powoduje odrysowanie pola (cx, cy).
+
+</TABLE>
+
+<H2>Funkcje obsługujące okienko dialogowe "NewGame"</H2>
+Parametr hWnd to zawsze uchwyt do okna NewGame.
+
+<TABLE BORDER>
+
+<TR><TD VALIGN = TOP><PRE>void OnInitDialog(HWND hWnd);
+<TD>Inicjowanie w momencie wywołania okna.
+
+<TR><TD VALIGN = TOP><PRE>void SwitchPlayers(HWND hWnd);
+<TD>Zamienia ustawienia graczy.
+
+<TR><TD VALIGN = TOP><PRE>void UpdateControls(HWND hWnd);
+<TD>Ustala wartości pozycji elementów kontrolnych zgodnie z danymi globalnymi.
+
+<TR><TD VALIGN = TOP><PRE>void GetValues(HWND hWnd);
+<TD>Zapamiętuje wartości elementów kontrolnych w zmiennych globalnych.
+</TABLE>
+
+<H2>Funkcje obsługujące okienko dialogowe "Log"</H2>
+
+<TABLE BORDER>
+
+<TR><TD VALIGN = TOP><PRE>void ClearDialog(HWND hWnd);
+<TD>Czysci okno logowania. Parametr hWnd - uchwyt okna Log.
+<TR><TD VALIGN = TOP><PRE>void WriteLog(int points, int nSearched, int speed);
+<TD>Wypisuje informacje: liczbę punktów, liczbę przeszukanych ruchów, szybkość analizy.
+</TABLE>
+
+</BODY>

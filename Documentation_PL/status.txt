@@ -1,0 +1,29 @@
+STATUS1
+
+OOOO_   9
+ OOO_   8
+XOOO_   7
+  OO_   6
+ XOO_   5
+   O_   4
+  XO_   3
+    _   2
+   X_   1
+   X_X  0
+
+STATUS4
+
+OOOO_        8  A
+ OOO_        7  B
+XOOO_OOOX    7  B
+XOOO_OO      6  C
+XOOO_OOX     5  D
+XOOO_O       5  D
+XOOO_OX      4  E
+XOOO_        4  E
+  OO_OO      3  F
+  OO_OOX     2  G
+  OO_O       2  G
+  OO_OX      1  H
+  OO_        1  H
+

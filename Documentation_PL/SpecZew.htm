@@ -1,0 +1,39 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Specyfikacja zewnętrzna
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Specyfikacja zewnętrzna</H1>
+<HR>
+<H2>Wymagania sprzętowe</H2>
+Program pracuje w środowisku Windows 9x/NT/2000/XP. Potrzebuje do 4 MB pamięci RAM.
+Dla dużych głębokości przeszukiwania wymaga silnego procesora, ale do gry z przeciętnym
+człowiekiem wystarczy do wygrania głębokość równa 4, na której program działa bardzo
+szybko nawet na słabych komputerach.
+
+<H2>Interface użytkownika</H2>
+<H3>Opis poleceń manu</H3>
+<TABLE BORDER>
+<TR><TD>Game->New<TD>Wyświetla okienko dialogowe NewGame, w którym ustawia się parametry nowej gry.
+<TR><TD>Game->Undo<TD>Umożliwia cofnięcie jednego ruchu. Jest aktywne tylko, gdy cofnięcie jest możliwe.
+<TR><TD>Game->Exit<TD>Kończy program.
+<TR><TD>Help->About<TD>Wyświetla informację o programie.
+</TABLE>
+
+<H3>Okna główne</H3>
+W tym oknie wyświetlany jest aktualny stan planszy, z wyróżnionym ostatnim ruchem.<BR><BR>
+<IMG SRC="screen1.gif"><BR>
+
+<H3>Okienko dialogowe NewGame</H3>
+Tutaj wybieramy parametry nowej gry. Wybieramy graczy i ustawiamy parametry dla sztucznej inteligencji, z których
+w "Time Limit" i "Allow computer..." są bez znaczenia. Zostały wprowadzone z myślą o kolejnych wersjach programu.
+"Search Depth" ustala głębokość przeszukiwania. Ustawienie tutaj zbyt dużej wartości spowoduje bardzo długi czas
+myślenia komputera. Dla algorytmu AISimple ta wartość także nie ma znaczenia. Dla AICarbon zalecam 4 dla gry
+rozrywkowej i 6-7 dla bardziej zaawansowanych graczy.
+
+<BR><BR><IMG SRC="screen2.gif"><BR>
+
+</BODY>

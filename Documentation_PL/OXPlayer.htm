@@ -1,0 +1,33 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Klasa OXPlayer
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+
+<H1>Klasa OXPlayer</H1>
+<HR>
+
+<H2>Pliki</H2>
+OXPlayer.h
+<H2>Opis</H2>
+Klasa abstakcyjna. Jej pochodne definiują algorytmy sztucznej inteligencji.
+
+<H2>Metody publiczne</H2>
+<TABLE BORDER>
+  <TR><TD VALIGN = TOP><PRE>virtual void start(int bsize) = 0<TD>Rozpoczyna grę na planszy o rozmiarze <tt>bsize</tt>.
+
+  <TR><TD VALIGN = TOP><PRE>virtual void move(int x, int y) = 0<TD>Wykonuje ruch na pozycji (x, y). Służy do informowania o ruchu przeciwnika.
+
+  <TR><TD VALIGN = TOP><PRE>virtual void yourTurn(int &x, int &y,
+int depth = 0, int time = 0) = 0<TD>Powoduje wybranie ruchu przez algorytm AI. Parametr <tt>depth</tt> zawiera maksymalną głębokość przeszukiwania, a <tt>time</tt> limit czasu w milisekundach. Wybrany ruch jest automatycznie traktowany jako wykonany.
+
+  <TR><TD VALIGN = TOP><PRE>virtual void think(int time)<TD>Na razie nie wykorzystywane.
+
+  <TR><TD VALIGN = TOP><PRE>virtual void undo() = 0<TD>Powoduje cofnięcie się do sytuacji sprzed ostatniego ruchu.
+
+  <TR><TD VALIGN = TOP><PRE>virtual const char* name() const = 0<TD>Zwraca nazwę algorytmu AI. Nie wiecej niż 31 znaków.
+
+</BODY>

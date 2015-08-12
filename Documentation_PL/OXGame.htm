@@ -1,0 +1,37 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Klasa OXGame
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+
+<H1>Klasa OXGame</H1>
+<HR>
+
+<H2>Pliki</H2>
+OXGame.cpp, OXGame.h
+
+<H2>Opis</H2>
+Klasa OXGame przechowuje i udostępnia informacje o stanie gry, umożliwia wykonywanie, cofanie ruchów
+oraz wykrywanie zakończenia.
+
+<H2>Metody publiczne</H2>
+<TABLE BORDER VALIGN = TOP>
+<TR><TH>Metoda</TH><TH>Opis</TH></TR>
+<TR><TD><PRE>OXGame()</TD><TD>Konstruktor</TD>
+<TR><TD VALIGN = TOP><PRE>void    start(int bsize = 19)</TD><TD>Rozpoczyna nową grę na planszy o rozmiarze <tt>bsize</tt>. Wykonywany jest pierwszy ruch na środku planszy.</TD>
+<TR><TD VALIGN = TOP><PRE>bool    move(int x, int y)<TD>Wykonuje ruch <tt>(x, y)</tt>. Zwraca <tt>true</tt> w przypadku zakończenia gry.
+<TR><TD VALIGN = TOP><PRE>void    undo()<TD>Cofa ostatni ruch.
+<TR><TD VALIGN = TOP><PRE>OXPiece cell(int x, int y) const<TD>Zwraca zawartość komórki <tt>(x, y)</tt>, lub <tt>WRONG</tt> w przypadku przekroczenia zakresów.
+<TR><TD VALIGN = TOP><PRE>bool    isWinPoint(int x, int y) const<TD>Czy pole <tt>(x, y)</tt> należy do wygrywającej piątki?
+<TR><TD VALIGN = TOP><PRE>int     moveCount() const<TD>Zwraca liczbę ruchów.
+<TR><TD VALIGN = TOP><PRE>int     boardSize() const<TD>Zwraca rozmiar planszy.
+<TR><TD VALIGN = TOP><PRE>OXPoint lastMove() const<TD>Zwraca ostatni ruch.
+<TR><TD VALIGN = TOP><PRE>OXPiece player() const<TD>Zwraca aktualnego gracza.
+<TR><TD VALIGN = TOP><PRE>bool    finished() const<TD>Zwraca <tt>true</tt> wtedy i tylko wtedy, gdy gra jest zakończona.
+<TR><TD VALIGN = TOP><PRE>OXPiece winner() const<TD>Zwraca zwycięzcę; <tt>EMPTY</tt> w przypadku braku zakończenia.
+</TABLE>
+
+</BODY>

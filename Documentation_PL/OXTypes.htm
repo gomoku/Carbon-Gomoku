@@ -1,0 +1,27 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Wspólne definicje
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+
+<H1>Wspólne definicje</H1>
+<HR>
+
+<H2>Pliki</H2>
+OXTypes.h
+
+<H2>Opis</H2>
+Definicje typów, globalne stałe i makra używane w innych modułach.<BR><BR>
+
+<TABLE BORDER>
+<TR><TD VALIGN = TOP><PRE>const int MAX_BOARD_SIZE<TD>Maksymalny dozwolony rozmiar planszy.
+<TR><TD VALIGN = TOP><PRE>struct    OXPoint<TD>Stuktura przechowująca współrzędne pola na planszy<tt> (pola .x, .y)</tt>.
+<TR><TD VALIGN = TOP><PRE>enum      OXPiece<TD>Typ wyliczeniowy reprezentujący zawartość pola, wartości: <tt>EMPTY=2, OP=0, XP=1, WRONG=3</tt>.
+<TR><TD VALIGN = TOP><PRE>OXPoint   OPPONENT(p)<TD>Makro zwracające przeciwnika gracza <tt>p<tt> (typu <tt>OXPiece</tt>).
+<TR><TD VALIGN = TOP><PRE>const int DX[4], DY[4]<TD>Współrzędne wektorów wyznaczających 4 kierunki na planszy.
+</TABLE>
+
+</BODY>

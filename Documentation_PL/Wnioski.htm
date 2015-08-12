@@ -1,0 +1,30 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Wnioski
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Wnioski</H1>
+<HR>
+<H2>Dlaczego C++?</H2>
+Język C++ jest odpowiednim rozwiązaniem dla mojego zadania, ponieważ:
+<UL>
+<LI>Windows API jest napisane w C i dokumentacja MSDN dotyczy tego języka.
+<LI>Dzięki programowaniu obiektowemu z dziedziczeniem, można elegancko zaimplementować współpracę róznych algorytmów sztucznej inteligencji.
+<LI>C++ umożliwia uzyskanie szybkiego kodu dla niskopoziomowych operacji, które występują przy wykonywaniu, cofaniu i analizowaniu ruchów.
+Teoretycznie lepszy mógłby być assembler, jednak wiązałoby się to z utratą przejrzystości programu.
+</UL>
+
+<H2>Co można ulepszyć?</H2>
+<UL>
+<LI>W praktyce gry z ludźmi przez internet okazało się, że przydałby się mechanizm pospieszania komputera, gdy myśli zbyt długo.
+Można to uzyskać wykonując algorytm minimax dla kolejnych głębokości przeszukiwania i w momencie, gdy użytkownik nakaże przerwać
+obliczenia, algorytm zwróci najlepszy ruch z ostatniego ukończonego przeszukiwania.
+<LI>Można dalej starać się dobrać lepsze tablice heurystyczne określające punktowanie sytuacji i oszacowania wartości ruchów.
+<LI>Wprowadzić bibliotekę debiutów.
+<LI>Umożliwić komputerowi analizowanie sytuacji w osobnym procesie, podczas gdy człowiek zastanawia się nad ruchem.
+</UL>
+
+</BODY>

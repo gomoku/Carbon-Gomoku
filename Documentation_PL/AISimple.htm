@@ -1,0 +1,38 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - algorytm AISimple
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Algorytm AISimple</H1>
+<HR>
+<H2>Pliki</H2>
+AISimple.cpp, AISimple.h
+<H2>Opis</H2>
+
+Prosty algorytm sztucznej inteligencji. Nie używa on przeszukiwania,
+ale w prosty sposób blokuje niebezpieczne układy i wybiera najlepiej
+punktowany przez siebie ruch, punktując następująco każde pole:
+
+<PRE>
+PUNKTY POLA =
+  SUMA dla kazdego gracza
+    SUM dla 4 kierunkow
+      KWADRATOW
+        SUM dla kazdej mozliwej piatki
+           LICZB juz ulozonych znakow tej piatki
+</PRE>
+
+<H2>Nowe metody</H2>
+<TABLE BORDER>
+<TR><TD><tt>bool isCand(int x, int y);</tt>
+<TD>Sprawdza, czy warto brać to pole pod uwage, tzn. czy ma obok siebie pole niepuste.
+<TR><TD><tt>int  eval(int xp, int yp, OXPiece who);</tt>
+<TD>Ocenia pole (xp, yp) z punktu widzenia gracza <tt>who</tt>
+<TR><TD><tt>int  count(int x, int y, int dx, int dy, OXPiece p);</tt>
+<TD>zlicza znaki <tt>p</tt>, zaczynając od pola (x, y) w 5 polach w kierunku wektora<tt>[dx, dy]</tt>
+</TABLE>
+
+</BODY>

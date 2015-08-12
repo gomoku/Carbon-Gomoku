@@ -1,0 +1,62 @@
+#include <windows.h>
+#include <commctrl.h>
+#include "Resource.h"
+#include "afxres.h"
+
+MainMenu MENU DISCARDABLE
+BEGIN
+    POPUP "Game"
+    BEGIN
+        MENUITEM "New...",         IDM_FILE_NEW
+        MENUITEM SEPARATOR
+        MENUITEM "Undo",           IDM_FILE_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",           IDM_FILE_EXIT
+    END
+    POPUP "Help"
+    BEGIN
+        MENUITEM "About...",       IDM_HELP_ABOUT
+    END
+END
+
+NewGameDialog DIALOG DISCARDABLE 0, 0, 295, 95
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New Game"
+FONT 8, "MS Sans Serif"
+BEGIN
+
+  DEFPUSHBUTTON "Start",        ID_BUTTON_START,   69, 72, 49, 15
+  DEFPUSHBUTTON "Cancel",       ID_BUTTON_CANCEL, 123, 72, 49, 15
+  DEFPUSHBUTTON "Switch Sides", ID_BUTTON_SWITCH, 177, 72, 49, 15
+  
+  LTEXT         "Player Name",    ID_TEXT_NAME,   21, 5, 40, 8
+  LTEXT         "Search Depth",   ID_TEXT_DEPTH, 181, 5, 60, 8
+  LTEXT         "Time Limit [s]", ID_TEXT_TIME,  235, 5, 40, 8
+  
+  EDITTEXT      ID_EDIT_DEPTH_O, 181, 19, 40, 13
+  EDITTEXT      ID_EDIT_DEPTH_X, 181, 38, 40, 13
+  EDITTEXT      ID_EDIT_TIME_O,  235, 19, 40, 13
+  EDITTEXT      ID_EDIT_TIME_X,  235, 38, 40, 13
+
+  COMBOBOX      ID_COMBO_O, 21, 19, 155, 100, CBS_DROPDOWNLIST
+  COMBOBOX      ID_COMBO_X, 21, 38, 155, 100, CBS_DROPDOWNLIST
+
+  AUTOCHECKBOX  "Allow computer think in background", ID_THINK_BG, 21, 56, 129, 8
+
+  CONTROL       "", ID_SPIN_DEPTH_O, "msctls_updown32", UDS_ARROWKEYS | UDS_SETBUDDYINT, 219, 18, 11, 15
+  CONTROL       "", ID_SPIN_DEPTH_X, "msctls_updown32", UDS_ARROWKEYS | UDS_SETBUDDYINT, 219, 37, 11, 15
+  CONTROL       "", ID_SPIN_TIME_O,  "msctls_updown32", UDS_ARROWKEYS | UDS_SETBUDDYINT, 272, 18, 11, 15
+  CONTROL       "", ID_SPIN_TIME_X,  "msctls_updown32", UDS_ARROWKEYS | UDS_SETBUDDYINT, 272, 37, 11, 15
+
+END
+
+LogDialog DIALOG DISCARDABLE 0, 0, 240, 240
+STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "AI LOG"
+FONT 8, "MS Sans Serif"
+BEGIN
+  LISTBOX      ID_LOG_O,   0, 0, 120, 240, WS_VSCROLL
+  LISTBOX      ID_LOG_X, 120, 0, 120, 240, WS_VSCROLL
+END
+
+

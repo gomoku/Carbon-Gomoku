@@ -1,0 +1,183 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Analiza
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Analiza</H1>
+<HR>
+<H2>Podstawowe konwencje</H2>
+"Kółko" i "Krzyżyk" nazywam "znakami".<BR>
+Możliwy do wykonania ruch nazywam "kandydatem".<BR>
+Na rysunkach kółkiem oznaczam gracza, z punktu widzenia którego oceniam sytuację.<BR>
+
+<H2>Analiza pojedynczego pola</H2>
+<P>Przy analizie pojedynczego pola, istotne znaczenie mają po 4 sąsiednie pola w każdym z 8
+kierunków, czyli pola które na rysunku oznaczylem gwiazdką:
+<PRE>
+*   *   *
+ *  *  *
+  * * *
+   ***
+****O****
+   ***
+  * * *
+ *  *  *
+*   *   *
+</PRE>
+
+<H3>Analiza dla jednego kierunku</H3>
+<P>Wszystkie możliwe układy 8 sąsiednich pól w jednym kierunku podzieliłem na klasy:
+<PRE>
+OOOO_   9  "niekryta czwórka"
+.OOO_   8  "niekryta trójka"
+XOOO_   7  "kryta trójka"
+..OO_   6
+.XOO_   5
+...O_   4
+..XO_   3
+...._   2
+...X_   1
+...X_X  0  "nic"
+
+(kropka oznacza puste pole, podkreślenie pole rozpatrywane).
+</PRE>
+Liczbę, którą przypisałem każdemu z tych układów nazywam statusem-jeden.
+
+<H3>Analiza dla wszystkich 4 kierunków</H3>
+<P>Duże znaczenie mają kombinacje dwóch najbardziej istotnych z czterech statusów-jeden, które
+także pogrupowałem. W poniższym zapisie, to co jest na lewo i na prawo od "_", występuje w
+różnych kierunkach:
+<PRE>
+OOOO_        8  A
+ OOO_        7  B
+XOOO_OOOX    7  B
+XOOO_OO      6  C
+XOOO_OOX     5  D
+XOOO_O       5  D
+XOOO_OX      4  E
+XOOO_        4  E
+  OO_OO      3  F
+  OO_OOX     2  G
+  OO_O       2  G
+  OO_OX      1  H
+  OO_        1  H
+inne         0
+</PRE>
+Tym razem liczby przypisane kombinacjom układów z różnych kierunków są nazwane statusem-cztery pola
+i w kodzie posługuję się do ich opisu typem wyliczeniowym o elementach A, B, C, ..., H. Przy czym
+uporządkowanie jest od A (największa wartość) do H (najmniejsza). H ma wartość 1, a wszystkie
+pozostałe możliwe układy oznaczam przez 0.
+
+
+<H3>Rozwiązanie składowania informacji o stanie pola</H3>
+Najprostszym rozwiązaniem byłoby pamiętanie tylko tego, co jest na danym polu. Jest to jednak rozwiązanie
+bardzo nieefektywne. Wymagamy, aby rozpoznawanie statusów-jeden i statusów-cztery, każdego pola
+było szybkie. W tym celu, dla każdego pola pamiętam tablicę 4 x 2 (4 kierunki, 2 znaki) liczb
+8-bitowych, których każdy bit oznacza, czy na przypisanej mu względnej pozycji w określonym kierunku
+jest określony znak. Wartości te trzeba aktualizować za każdym razem gdy jakiś znak jest wstawiany
+lub usuwany z planszy. Pełna informacja o układzie 8 znaków w jednym kierunku jest wiec zapisana
+w dwóch 8-bitowych liczbach (w kodzie tablica <tt>pattern</tt>). Status-jeden łatwo więc zapamiętać
+w obliczonej wstępnie tablicy od rozmiarach 256 x 256. Status-cztery znajduję natomiast w tablicy
+10x10x10x10 elementów, której każdy z 4 indeksów oznacza wartość statusu-jeden każdego z 4 kierunków.
+
+<H2>Ocena sytuacji</H2>
+Funkcja oceniająca bieżącą pozycję, czyli przypisująca jej pewną wartość, tym większą, im jest lepsza
+z punktu widzenia aktualnego gracza, jest podstawą użytego algorytmu. Można ją skonstruować na wiele
+różnych sposobów. Ja przyjąłem, że osobno ocenię sytuację każdego znaku na planszy i wyniki posumuję
+(z minusem dla znaków przeciwnika). Ocenianie jednego znaku rozbiłem dalej na sumę ocen każdego z czterech
+kierunków. Każdy z czterem kierunków oceniam na podstawie liczby możliwych ułożeń wygrywającej piątki,
+przechodzącej przez to pole, za pomocą wykonania od 1 do 5 ruchów. Dla każdej możliwości ułożnia piątki
+w jednym ruchu daję 19 punktów, dla 2 ruchów 15, dla 3 ruchów 11, dla 4 ruchów 7, dla 5 ruchów 3.
+Wartość oceny sytuacji z punktu widzenia gracza kółkiem różni się znakiem od wartości oceny tej samej
+sytuacji z punktu widzenia gracza krzyżykiem. Przyjąłem wartość sytuacji wygranej równą WIN_MAX=30000.
+Jest to wygrana już. Wygrana w n ruchach ma wartość WIN_MAX-n;
+
+<H2>Algorytm minimax</H2>
+Algorytm minimax jest algorytmem rekurencyjnym, który przeszukuje (wykonując i cofając) możliwe ruchy
+określoną liczbę (kilka) ruchów do przodu. Najdalsze pozycje oceniane są funkcją heurystyczną i zwracany
+jest w wyniku najlepszy ruch i jego wartość. Na jednym poziomie rekurencji rozpatruje się jedną sytuację
+i możliwe do wykonania ruchy. Po utworzeniu listy możliwych ruchów, każdy z nich jest wykonywany,
+algorytm dla zmienionej sytuacji wykonywany jest rekurencyjnie ze zmniejszoną o jeden głębokością
+przeszukiwania (za każdym razem z punktu widzenia przeciwnego gracza), a następnie ruch jest cofany
+i analizuje się następny. Jako najlepszy wybiera się ruch, po którym najlepszy możliwy kolejny był
+najgorszy ze wszystkich najlepszych po pozostałych możliwych ruchach (reguła mini-max). Wygląda to tak,
+że wybieramy ruch, po którym wartość najlepszego ruchu z wywołania rekurencyjnego wzięta z przeciwnym
+znakiem jest największa i ta wartość jest wartością najlepszego ruchu z bieżącego poziomu rekurencji.
+
+<H2>Algorytm minimax z odcięciami</H2>
+Algorytm minimax można bardzo ulepszyć stosując tzw. odcięcia. Analizując drzewo ruchów, można zauważyć,
+że pewne jego gałęzie są przeglądane zupełnie niepotrzebnie. Po przeanalizowaniu części możliwych ruchów,
+na pewnym poziomie rekurecji (1),
+mamy pewien ruch, który aktualnie uznajemy za najlepszy. Oznaczmy jego wartość przez <tt>-beta</tt>. Jeżeli
+w kolejnym wywołaniu rekurencji (2) bedziemy mieli już ruch o wartości większej od <tt>beta</tt>, to wiadomo,
+że wynik tego wywołania i tak nie wpłynie na wybór najepszego ruchu na poprzednim poziomie (1), ponieważ
+zwrócona do poprzedniego poziomu (1) wartość ruchu, będzie i tak mniejsza od wartości ruchu, który jest tam (1)
+uznawany za dotychczas najlepszy. Teraz mając dodatkowy parametr beta (2), zauważymy, że jeżeli w kolejnym (3)
+wywołaniu uzyskamy wartość ruchu mniejszą od -beta, czyli gdy zmienimy znak, będzie to wartość więsza od
+beta, to te ruchy i tak nie wpłyną na wybór najlepszego dwa poziomy wyżej w rekurencji (1), bo najlepszy ruch
+o poziom wyżej (2) przekroczy wartość beta, czyli będzie gorszy od dotychczas najlepszego dwa poziomy wyżej (1).
+W ten sposób wprowadzamy parametr <tt>alpha</tt> (równy -beta dla poprzedniego poziomu), który użyty jako
+początkowa wartość najlepszego ruchu, powoduje uzyskanie lepszej (mniejszej) wartości parametru beta,
+w następnym wywołaniu rekurencji.
+
+<H2>Dalsze ulepszenia</H2>
+Efektywność cięć alpha-beta silnie zależy od kolejności analizowania ruchów. Najlepiej jest gdy ruchy najlepsze
+są analizowane jako pierwsze. Wtedy złożoność algorytmu jest rzędu pierwiastka kwadratowego złożoności dla
+przypadku odwrotnego (najgorszego). Jako, że nie można z góry przewidzieć, który ruch będzie najlepszy (nie
+miało by wtedy sensu przeszukiwanie), każdy ruch jest wstępnie oceniany w sposób przybliżony. Służy do tego
+funkcja, która w sposób podobny jak w funkcji oceniającej całą pozycję, ocenia pole na podstawie
+stablicowanych, wcześniej przeliczonych wartości przyporządkowanych każdemu układowi dla 4 kierunków. W moim
+programie jest to tablica PRIOR, której dwoma indeksami są wartości bitowej reprezentacji układu (2 liczby 8-bitowe).
+Tak przygotowanych kandydatów odpowiedznio sortujemy i dopiero przetwarzamy.
+
+<H2>Wiedza ekspercka</H2>
+Dalej można poprawiać umiejętności algorytmu wbudowując rozwiązania typowych sytuacji. I tak nauczyłem mój
+algorytm bez zbędnej analizy ustawiać znak w sytuacjach, o których wiadomo na podstawie wartości status-cztery,
+że są wygrywające i analogocznie blokować przeciwnika. Zrealizowałem to w funkcji generującej listę kandydatów.
+Jest to: ustawianie piątki, blokowanie czwórki przeciwnika, ustawianie nie krytej czwórki oraz blokowanie nie
+krytej trójki przeciwnika.<BR> Ponadto algorytm rozpoznaje przesądzone pozycje w funkcji szybkiego szukania
+zakończenia (quickWinSearch). Jeżeli istnieje ruch ustawiający piątkę, lub przeciwnik ma dwie możliwości
+ustawienia piątki, lub znowu my możemy taką możliwość utworzyć, to wiadomo co jest i nie trzeba dalej sprawdzać.
+Niektóre sytuacje są niemal na pewno przesądzone, ale nie do końca - wtedy poza głównym przeszukiwaniem
+testujemy ruchy, które są potencjalnie bardzo groźne - na pola o statusie-cztery dla bieżącego gracza równym
+C lub F. Jeżeli przeciwnikowi trzeba zablokować czwórkę, to robimy to i rekurencyjnie szukamy szybkiego
+zakończenia.
+
+<H2>Generowanie kandydatów</H2>
+Wiele możliwych ruchów można z góry odrzucić. Po pierwsze rozpatruję tylko pola, które mieszczą sie w prostokącie,
+którego lewy-górny róg jest o dwa pola na lewo od najbedziej lewego niepustego pola i o dwa pola powyżej najbardziej
+górnego niepustego pola. Analogicznie wyznaczony jest prawy-dolny róg. Po drugie odrzucam kandydatów, którzy
+wstępnie zostali bardzo nisko ocenieni (wartością mniejszą od 2).<BR>
+Początkowo zastosowałem inne rozwiązanie - listę kandydatów, aktualizowaną po każdym ruchu i cofnięciu, ale
+okazało się to nie szybsze, a za to dużo bardziej zawiłe.
+
+<H2>Tablica transpozycji</H2>
+Możliwe jest uzyskanie tej samiej sytuacji w wyniku wykonywania ruchów w innej kolejności. Aby nie analizować
+kilkakrotnie tych samych sytuacji zastosowałem słownik w postaci tablicy mieszającej, w którym zapamiętuję wynik
+analizowania sytuacji. Potrzebne jest do tego generowanie sygnatury sytuacji, o czym jest mowa w kolejnym punkcie.
+Do zapamiętania wyniku uprawnieni jesteśmy jednak tylko w sytucji, gdy otrzymana wartość najlepszego ruchu zawiera
+sie w oknie alpha-beta, w przeciwnym razie wynik jest różny dla różnych okien. Ponownie możemy skorzystać z tego
+wyniku tylko wtedy, gdy przeszukujemy ponownie na tę samą głębokość.<BR>
+Dodatkowym atutem słownika ruchów jest możliwość (z której skorzystałem) zapamiętywania najlepszego kolejnego
+ruchu, który będzie rozpatrywany jako pierwszy przy głębszym przeszukiwaniu, co polepsza efektywność cięć (-> Dalsze
+ulepszenia). Jest to skuteczne, ponieważ przed rozpoczęciem przeszukiwania, dysponujemy w tym momencie, wynikami
+przeszukiwania z poprzedniej kolejki.<BR>
+Alternatywą wobec tablicy transpozycji może być zapamiętywanie struktury drzewa ruchów. Takie rozwiązanie mogło by
+z powodzeniem radzić sobie z pamiętaniem kolejnego najlepszego ruchu, ale nie rozwiązuje problemu ponownego
+analizowania tych samych sytuacji otrzymanych w wyniku różnej kolejności ruchów.
+
+<H2>Sygnatury sytuacji</H2>
+Każdemu polu na planszy przyporządkowane są 2 liczby losowe, które wchodzą do sumy - pierwsza gdy na polu
+jest kółko, druga, gdy krzyżyk. Suma dla wszystkich zajętych pól jest sygnaturą sytuacji. Całkowity rozmiar
+sygnatury wynosci 64 bity + liczba bitów odpowiadająca rozmiarowi tablicy (tylko częśc sygnatury służy do
+indeksowania tablicy, reszta jest potrzebna do odróżniania różnych sytuacji). Dla tablicy 64k elementowej jest
+w sumie 80 bitów. Zastosowana funkcja mieszająca nie jest matematycznie całkowicie poprawna, ale zakładam,
+że wystąpowanie kolizji jest dla 80 bitów skrajnie żadkie, tak że można się tym nie przejmować (w najgorszym
+wypadku spowoduje to gorszą grę komputera, ale nie błąd wykonania). Rozmiar tablicy mieszającej powinien
+być porównywalny z liczbą ruchów analizowanych w jednej kolejce. Kolizjami w tablicy w ogóle się nie
+przejmuję, ponieważ tak jest szybciej, a utrata ważnej informacji zdarza się rzadko i nie powoduje dużych
+konsekwencji.
+</BODY>

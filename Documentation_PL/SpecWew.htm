@@ -1,0 +1,37 @@
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+  <TITLE>
+    Dokumentacja programu Carbon Gomoku - Moduły
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR = WHITE>
+<H1>Moduły i pliki wchodzące w skład projektu</H1>
+<HR>
+
+<H2><A HREF = "OXMain.htm">OXMain.cpp</A></H2>
+Moduł głowny - cały interface użytkownika.
+<H2><A HREF = "OXGame.htm">OXGame.cpp, OXGame.h</A></H2>
+Klasa OXGame przechowuje i udostępnia informacje o stanie gry, umożliwia wykonywanie, cofanie ruchów oraz wykrywanie zakończenia
+<H2><A HREF = "AISimple.htm">AISimple.cpp, AISimple.h</A></H2>
+Prosty, heurystyczny algorytm sztucznej inteligencji.
+<H2><A HREF = "AICarbon.htm">AICarbon.cpp, AICarbonMove.cpp, AICarbon.h</A></H2>
+"Firmowy" algorytm sztucznej inteligencji.
+<H2><A HREF = "OXTypes.htm">OXTypes.h</A></H2>
+Definicje typów, globalne stałe i makra używane w innych modułach.
+<H2><A HREF = "OXPlayer.htm">OXPlayer.h</A></H2>
+Klasa abstakcyjna OXPlayer. Jej pochodne definiują algorytmy sztucznej inteligencji.
+<H2>Timer.h</H2>
+Klasa Timer, służąca do pomiaru czasu.
+<H2>Random.h, Random.cpp</H2>
+Generator liczb losowych.
+<H2>HashValA.cpp, HashValB.cpp, HashValC.cpp</H2>
+Trzy 2048 elementowe tablice liczb losowych używane do generowania sygnatur.
+<H2>CONFIG.CPP, COUNT5.CPP, PRIOR3.CPP, STATUS1.CPP</H2>
+Pliki dołączane, zawierające przeliczone tablice interpretujące niskopoziomowy, binarny zapis układu 8 znaków
+w jednym kierunku wokół pewnego pola. Pierwsze dwie wyznaczają dla danego układu liczbę możliwości ułożenia
+piątki w 1, 2, ..., 5 ruchach. PRIOR3.CPP zawiera oszacowania wartości pól, a STATUS1.CPP wartości statusów-jeden.
+
+
+
+</BODY>

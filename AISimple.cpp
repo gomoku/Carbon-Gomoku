@@ -25,6 +25,11 @@ void AISimple::yourTurn(int &x, int &y, int, int)
   int i, j;
   int val, valA, valB;
   int best = -1;
+
+  if(game.moveCount() == 0){
+    x = game.boardSize()/2; y = game.boardSize()/2;
+    return;
+  }
   //for (i = 0; i < 1000000; i++) for (j = 0; j < 100; j++);
   for (i = 0; i < game.boardSize(); i++)
     for (j = 0; j < game.boardSize(); j++)
@@ -41,8 +46,7 @@ void AISimple::yourTurn(int &x, int &y, int, int)
               x = i; y = j;
               best = val;
             }
-        }
-  game.move(x, y);
+      }
 }
 
 // Sprawdza, czy warto brac to pole pod uwage,

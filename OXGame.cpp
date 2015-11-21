@@ -21,7 +21,6 @@ void OXGame::start(int bsize)
       _cell[i][j] = EMPTY;
   // first move
   _player = OP;
-  move(bsize / 2, bsize / 2);
 }
 
 bool OXGame::move(int x, int y)

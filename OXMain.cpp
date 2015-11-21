@@ -16,6 +16,11 @@
 #include "AICarbon.h"
 #include "Timer.h"
 
+#pragma comment(lib,"comctl32.lib")
+
+void brain_checkTimeout(){}
+int terminateAI = 0;
+
 int va, vb;
 // Komunikat - komputer skonczyl liczyc
 #define WM_PERFORM_MOVE (WM_USER + 0)
@@ -185,6 +190,7 @@ DWORD AIThreadProc(LPVOID param)
   game.player() == OP ?
     currPlayer->yourTurn(cx, cy, oSearchDepth, oTimeLimit) :
     currPlayer->yourTurn(cx, cy, xSearchDepth, xTimeLimit);
+  currPlayer->move(cx, cy);
 
   aiThinking = false;
   SendMessage((HWND)param, WM_PERFORM_MOVE, 0, MAKELONG(cx, cy));

@@ -1,7 +1,7 @@
 #include "AICarbon.h"
 #include "OXLog.h"
 #include "Timer.h"
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -82,6 +82,11 @@ void AICarbon::init()
 // ----------------------------------------------------------------------------
 void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 {
+  if(moveCount == 0){
+    x = boardSize/2; y = boardSize/2;
+    return;
+  }
+
   Timer t;
   OXMove m(0, 0, 0);
 
@@ -102,8 +107,6 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
   x = best.x - 4;
   y = best.y - 4;
   assert(!(x < 0 || x >= boardSize || y < 0 || y >= boardSize));
-  
-  move(x, y);
 }
 // ----------------------------------------------------------------------------
 int AICarbon::evaluate()
@@ -265,6 +268,9 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   
   int  i, x, y, value;
 
+  static int cnt;
+  if(--cnt<0){ cnt=1000; brain_checkTimeout(); }
+
   // szybkie rozpoznawanie zakonczenia
   int q = quickWinSearch();
   if (root == false && q != 0)
@@ -334,7 +340,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
           if (value <= -WIN_MIN) value++;
       
           // wynik jest dokladny, tylko wtedy gdy miesci sie w oknie
-          if (-vB <= value && value <= -vA)
+          if (-vB <= value && value <= -vA && !terminateAI)
             table.update(value, h - 1, moveCount, m);
         }
       
@@ -346,6 +352,8 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
           best = OXMove(cnd[i].x, cnd[i].y, value);
           if (value > beta) return OXMove(best.x, best.y, beta + 1);
         }
+
+      if(terminateAI) break;
     }
   return best;
 }

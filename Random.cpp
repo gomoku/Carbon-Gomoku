@@ -7,7 +7,7 @@ void _randomize()
 {
   time_t t;
   time(&t);
-  srand(t);
+  srand((unsigned int)t);
 }
 
 int  _random(int x)

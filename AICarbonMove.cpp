@@ -69,7 +69,6 @@ void AICarbon::start(int bsize)
   lowerRightCand = OXPoint(x + 1, y + 1);
   
   table.clear();
-  move(boardSize / 2, boardSize / 2);
 }
 // ----------------------------------------------------------------------------
 // xp, yp in <0, boardSize)

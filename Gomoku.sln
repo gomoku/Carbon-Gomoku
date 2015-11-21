@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CarbonAI", "CarbonAI.vcxproj", "{C08C2817-5668-4A35-B8EE-39CFCE8B7B70}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gomoku", "Gomoku.vcxproj", "{3B99010F-C158-4FB0-BB38-953F441E1022}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C08C2817-5668-4A35-B8EE-39CFCE8B7B70}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C08C2817-5668-4A35-B8EE-39CFCE8B7B70}.Debug|Win32.Build.0 = Debug|Win32
+		{C08C2817-5668-4A35-B8EE-39CFCE8B7B70}.Release|Win32.ActiveCfg = Release|Win32
+		{C08C2817-5668-4A35-B8EE-39CFCE8B7B70}.Release|Win32.Build.0 = Release|Win32
+		{3B99010F-C158-4FB0-BB38-953F441E1022}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3B99010F-C158-4FB0-BB38-953F441E1022}.Debug|Win32.Build.0 = Debug|Win32
+		{3B99010F-C158-4FB0-BB38-953F441E1022}.Release|Win32.ActiveCfg = Release|Win32
+		{3B99010F-C158-4FB0-BB38-953F441E1022}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

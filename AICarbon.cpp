@@ -82,8 +82,10 @@ void AICarbon::init()
 // ----------------------------------------------------------------------------
 void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 {
-  if(moveCount == 0){
-    x = boardSize/2; y = boardSize/2;
+  if(moveCount == 0)
+  {
+    x = boardWidth/2; 
+    y = boardHeight/2;
     return;
   }
 
@@ -106,7 +108,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 
   x = best.x - 4;
   y = best.y - 4;
-  assert(!(x < 0 || x >= boardSize || y < 0 || y >= boardSize));
+  assert(!(x < 0 || x >= boardWidth || y < 0 || y >= boardHeight));
 }
 // ----------------------------------------------------------------------------
 int AICarbon::evaluate()

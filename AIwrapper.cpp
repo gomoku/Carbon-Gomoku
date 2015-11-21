@@ -12,7 +12,7 @@ AICarbon *ai;
 
 void brain_init()
 {
-  if(width<5 || width>MAX_BOARD_SIZE || height!=width){
+  if(width<5 || width>MAX_BOARD_SIZE || height<5 || height>MAX_BOARD_SIZE){
     pipeOut("ERROR size of the board");
     return;
   }
@@ -23,7 +23,7 @@ void brain_restart()
 {
   delete ai;
   ai = new AICarbon();
-  ai->start(width);
+  ai->start(width, height);
   pipeOut("OK");
 }
 

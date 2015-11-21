@@ -47,6 +47,7 @@ class AICarbon : public OXPlayer
   public:    
    
     void start(int size);
+    void start(int width, int height);
     void move(int x, int y);
     void yourTurn(int &x, int &y, int depth = 0, int time = 0);
     void undo(); 
@@ -104,7 +105,7 @@ class AICarbon : public OXPlayer
     // ------------------------------------------------------------------------
     // stan gry
     OXCell  cell[ BSIZE ][ BSIZE ]; // tablica pol    
-    int     boardSize;  // rozmiar planszy
+    int     boardWidth, boardHeight;  // rozmiar planszy
     int     moveCount;  // liczba wykonanych ruchow
     OXPiece who, opp;   // who, opp - aktualny i nastepny gracz 
     int     nSt[2][9];  // nSt[i][j] - liczba pol o statusie j gracza i

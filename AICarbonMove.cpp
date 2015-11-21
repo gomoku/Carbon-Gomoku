@@ -4,18 +4,24 @@
 // ----------------------------------------------------------------------------
 // Podstawowe funkcje
 // ----------------------------------------------------------------------------
-void AICarbon::start(int bsize)
+void AICarbon::start(int size)
+{
+  start(size, size);
+}
+
+void AICarbon::start(int width, int height)
 {
   int x, y, xx, yy, k, p;
 
   init();
 
-  boardSize = bsize;
+  boardWidth = width;
+  boardHeight = height;
   // wypelnianie planszy wartosciami poczatkowymi
-  for (y = 0; y < boardSize + 8; y++)
-    for (x = 0; x < boardSize + 8; x++)
+  for(y = 0; y < height + 8; y++)
+    for(x = 0; x < width + 8; x++)
       {
-        (x < 4 || y < 4 || x >= boardSize + 4 || y >= boardSize + 4) ?
+        (x < 4 || y < 4 || x >= width + 4 || y >= height + 4) ?
           cell[x][y].piece = WRONG :
           cell[x][y].piece = EMPTY;
 
@@ -25,8 +31,8 @@ void AICarbon::start(int bsize)
           }
       } 
   // inicjowanie <pat>
-  for (y = 4; y < boardSize + 4; y++)
-    for (x = 4; x < boardSize + 4; x++)
+  for(y = 4; y < height + 4; y++)
+    for(x = 4; x < width + 4; x++)
       for (k = 0; k < 4; k++)
         {
           xx = x - DX[k]; yy = y - DY[k];
@@ -45,8 +51,8 @@ void AICarbon::start(int bsize)
             }           
         }
   // inicjowanie statusow
-  for (y = 4; y < boardSize + 4; y++)
-    for (x = 4; x < boardSize + 4; x++)
+  for(y = 4; y < height + 4; y++)
+    for(x = 4; x < width + 4; x++)
       {
         cell[x][y].update1(0);
         cell[x][y].update1(1);
@@ -59,7 +65,8 @@ void AICarbon::start(int bsize)
   int i, j;
   for (i = 0; i < 2; i++) for (j = 0; j < 9; j++) nSt[i][j] = 0;
 
-  x = y = boardSize / 2 + 4;
+  x = width / 2 + 4;
+  y = height / 2 + 4;
   totalSearched = 0;
   who = OP;
   opp = XP;
@@ -114,8 +121,8 @@ void AICarbon::_move(int xp, int yp)
   
   if (upperLeftCand.x < 4) upperLeftCand.x = 4;
   if (upperLeftCand.y < 4) upperLeftCand.y = 4;
-  if (lowerRightCand.x > boardSize + 3) lowerRightCand.x = boardSize + 3;
-  if (lowerRightCand.y > boardSize + 3) lowerRightCand.y = boardSize + 3;
+  if (lowerRightCand.x > boardWidth + 3) lowerRightCand.x = boardWidth + 3;
+  if (lowerRightCand.y > boardHeight + 3) lowerRightCand.y = boardHeight + 3;
 
   // modyfikowanie <pat> i <points>         
   for (k = 0; k < 4; k++)

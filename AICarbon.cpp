@@ -307,6 +307,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   if (nCnd == 0)
     {
       FOR_EVERY_CAND(x, y) cnd[nCnd++] = OXCand(x, y, 0);
+      if(nCnd == 0) best.value = 0; //board is full
     }
 
   // symulowanie ruchow

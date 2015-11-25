@@ -59,4 +59,10 @@ void brain_end()
 
 void WriteLog(int points, int nSearched, int speed)
 {
+  pipeOut("DEBUG points %d, nodes %d, speed %d", points, nSearched, speed);
+}
+
+long getTime()
+{ 
+  return (long)GetTickCount();
 }

@@ -83,11 +83,6 @@ void AICarbon::init()
       PRIOR[a][b] = getPrior(a, b);
 }
 // ----------------------------------------------------------------------------
-long AICarbon::getTime()
-{
-  return clock()/(CLOCKS_PER_SEC/1000);
-}
-
 long AICarbon::stopTime()
 {
   return start_time + __min(info_timeout_turn, info_time_left / MATCH_SPARE) - 30;
@@ -130,7 +125,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
       y= best.y - 4;
 
       t1=getTime();
-      if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) >= stopTime()) break;
+      if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) - stopTime() >= 0) break;
     }
   }
 
@@ -303,7 +298,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   static int cnt;
   if(--cnt<0){ 
     cnt=1000;  
-    if(getTime()>stopTime()) terminateAI=2;
+    if(getTime() - stopTime() > 0) terminateAI=2;
   }
 
   // szybkie rozpoznawanie zakonczenia

@@ -134,11 +134,11 @@ class AICarbon : public OXPlayer
     bool check();
 
     long start_time;
-    long getTime();
     long stopTime();
 };
 
 extern int info_timeout_turn, info_time_left;
 extern int terminateAI;
+extern long getTime();
 
 #endif

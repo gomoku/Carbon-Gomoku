@@ -21,6 +21,8 @@
 int info_timeout_turn=1000; /* time for one turn in milliseconds */
 int info_time_left=1000000000; /* left time for a game */
 int terminateAI;
+long getTime() { return (long)GetTickCount(); }
+
 
 int va, vb;
 // Komunikat - komputer skonczyl liczyc

@@ -30,7 +30,7 @@ int va, vb;
 // Dane inteface-u
 // -----------------------------------------------------------------------------
 const LPSTR lpszMainWndClassName = "CarbonGomokuMainWndClass";
-const LPSTR lpszCaption = "Carbon Gomoku wersja PK";
+const LPSTR lpszCaption = "Carbon Gomoku";
 const int cellSize = 17;
 
 HINSTANCE ghInstance; // global handle
@@ -253,12 +253,12 @@ void StartNewGame(HWND hWnd)
   SetWindowText(hWnd, cap);
 
   oTimer.reset();
-  xTimer.reset(); xTimer.start();
+  xTimer.reset(); oTimer.start();
 
   game.start(boardSize);
   UpdateWindow(hWnd);
 
-  currPlayer = playerX;
+  currPlayer = playerO;
   StartThinking(hWnd);
 }
 // -----------------------------------------------------------------------------
@@ -355,7 +355,7 @@ void OnCommand(HWND hWnd, WPARAM wParam)
         break;
 
       case IDM_HELP_ABOUT:
-        MessageBox(hWnd, "Carbon Gomoku wersja PK\nautor: Micha³ Czardybon", "About", 0);
+        MessageBox(hWnd, "Carbon Gomoku 2.2\nautor: Micha³ Czardybon", "About", 0);
         break;
 
       case IDM_FILE_EXIT:

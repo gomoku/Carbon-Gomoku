@@ -355,7 +355,7 @@ void OnCommand(HWND hWnd, WPARAM wParam)
         break;
 
       case IDM_HELP_ABOUT:
-        MessageBox(hWnd, "Carbon Gomoku 2.2\nautor: Micha³ Czardybon", "About", 0);
+        MessageBox(hWnd, "Carbon Gomoku 2.2 (" __DATE__ ")\nauthor: Micha³ Czardybon", "About", 0);
         break;
 
       case IDM_FILE_EXIT:

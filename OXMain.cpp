@@ -20,7 +20,7 @@
 
 int info_timeout_turn=1000; /* time for one turn in milliseconds */
 int info_time_left=1000000000; /* left time for a game */
-int terminateAI = 0;
+int terminateAI;
 
 int va, vb;
 // Komunikat - komputer skonczyl liczyc
@@ -197,7 +197,8 @@ DWORD AIThreadProc(LPVOID param)
   currPlayer->move(cx, cy);
 
   aiThinking = false;
-  SendMessage((HWND)param, WM_PERFORM_MOVE, 0, MAKELONG(cx, cy));
+  if(terminateAI != 9) 
+    SendMessage((HWND)param, WM_PERFORM_MOVE, 0, MAKELONG(cx, cy));
 
   return 0;
 }
@@ -213,6 +214,23 @@ void NewPlayer(OXPlayer *&player, int playerIndex)
       case 1: player = new AISimple; break;
       case 2: player = new AICarbon; break;
     }
+}
+// -----------------------------------------------------------------------------
+void StartThinking(HWND hWnd)
+{
+  if(currPlayer)
+  {
+    EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED);
+
+    if(hAiThread) CloseHandle(hAiThread);
+    terminateAI = 0;
+    aiThinking = true;
+    hAiThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AIThreadProc, hWnd, 0, &aiThreadId);
+  }
+  else if(game.moveCount() >= 3)
+  {
+    EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_ENABLED);
+  }
 }
 // -----------------------------------------------------------------------------
 void StartNewGame(HWND hWnd)
@@ -241,15 +259,7 @@ void StartNewGame(HWND hWnd)
   UpdateWindow(hWnd);
 
   currPlayer = playerX;
-
-  if (currPlayer != 0)
-    {
-      EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED);
-      DWORD id;
-      aiThinking = true;
-      CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AIThreadProc, hWnd, 0, &id);
-    }
-  EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED);
+  StartThinking(hWnd);
 }
 // -----------------------------------------------------------------------------
 void PerformMove(HWND hWnd, int x, int y)
@@ -284,18 +294,9 @@ void PerformMove(HWND hWnd, int x, int y)
   game.player() == OP ? oTimer.start() : xTimer.start();
 
   currPlayer = currPlayer == playerO ? playerX : playerO;
- 
-  if (currPlayer != 0)
-    {
-      EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED); 
-      currPlayer->move(x, y);
-      aiThinking = true;
-      hAiThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AIThreadProc, hWnd, 0, &aiThreadId);
-    }
-  else if (game.moveCount() >= 3)
-    {
-      EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_ENABLED);
-    }
+
+  if(currPlayer) currPlayer->move(x, y);
+  StartThinking(hWnd);
 }
 // -----------------------------------------------------------------------------
 // Funkcje obslugujace zdarzenia okna glownego
@@ -332,10 +333,12 @@ void OnCommand(HWND hWnd, WPARAM wParam)
     {
       case IDM_FILE_NEW:
         if (aiThinking)
-          {
-            MessageBox(hWnd, "Can't create new game", "", MB_ICONWARNING);
-          }
-        else if (DialogBox(ghInstance, "NewGameDialog", hWnd, NewGameDialogProc) == 1)
+        {
+            terminateAI=9;
+            if(WaitForSingleObject(hAiThread, 3000) == WAIT_TIMEOUT)
+              TerminateThread(hAiThread,1);
+        }
+        if (DialogBox(ghInstance, "NewGameDialog", hWnd, NewGameDialogProc) == 1)
           {
             StartNewGame(hWnd);       
             InvalidateRect(hWnd, 0, 1);
@@ -642,6 +645,8 @@ void WriteLog(int points, int nSearched, int speed)
 {
   char lpszStr[128];
   char lpszCap[128];
+
+  if(terminateAI == 9) return;
 
   sprintf(lpszStr, "%6d %7d %6d", points, nSearched, speed);
   if (currPlayer == playerO)

@@ -108,7 +108,6 @@
     <ClInclude Include="STATUS1.CPP">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AICarbon.h" />

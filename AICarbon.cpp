@@ -1,10 +1,13 @@
 #include "AICarbon.h"
 #include "OXLog.h"
-#include "Timer.h"
+#include <time.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+
+#define MATCH_SPARE 7      //how much is time spared for the rest of game
+#define TIMEOUT_PREVENT 5  //how much is alfabeta slower when the depth is increased
 
 const int AICarbon::WIN_MIN = 25000;
 const int AICarbon::WIN_MAX = 30000;
@@ -80,8 +83,25 @@ void AICarbon::init()
       PRIOR[a][b] = getPrior(a, b);
 }
 // ----------------------------------------------------------------------------
+long AICarbon::getTime()
+{
+  return clock()/(CLOCKS_PER_SEC/1000);
+}
+
+long AICarbon::stopTime()
+{
+  return start_time + __min(info_timeout_turn, info_time_left / MATCH_SPARE) - 30;
+}
+
 void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 {
+  int i;
+  long t0, t1;
+  OXMove best;
+
+  start_time = getTime();
+  nSearched = 0;
+
   if(moveCount == 0)
   {
     x = boardWidth/2; 
@@ -89,25 +109,35 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
     return;
   }
 
-  Timer t;
-  OXMove m(0, 0, 0);
+  if(time > 0) info_timeout_turn = time * 1000;
 
-  if (depth == 0) depth = 1;
-  nSearched = 0;
+  if(depth > 0)
+  {
+    if(time == 0) info_timeout_turn = 1000000;
+    best = minimax(depth, true, -INF, INF);
+    x= best.x - 4;
+    y= best.y - 4;
+  }
+  else
+  {
+    for(i=2; i <= 50; i++)
+    {
+      t0=getTime();
 
-  t.start();  
-  m = minimax(depth, true, -INF, INF);
-  t.stop();
+      best = minimax(i, true, -INF, INF);
+      if(terminateAI && i>4) break;
+      x= best.x - 4;
+      y= best.y - 4;
+
+      t1=getTime();
+      if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) >= stopTime()) break;
+    }
+  }
 
   totalSearched += nSearched;
   
-  OXPoint best = m;
-  //if (moveCount == 1) best.x = 16;
+  WriteLog(best.value, nSearched, (int)(nSearched / (getTime()-start_time+1)));
 
-  WriteLog(m.value, nSearched, (int)(nSearched / t.time()));
-
-  x = best.x - 4;
-  y = best.y - 4;
   assert(!(x < 0 || x >= boardWidth || y < 0 || y >= boardHeight));
 }
 // ----------------------------------------------------------------------------
@@ -271,7 +301,10 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   int  i, x, y, value;
 
   static int cnt;
-  if(--cnt<0){ cnt=1000; brain_checkTimeout(); }
+  if(--cnt<0){ 
+    cnt=1000;  
+    if(getTime()>stopTime()) terminateAI=2;
+  }
 
   // szybkie rozpoznawanie zakonczenia
   int q = quickWinSearch();

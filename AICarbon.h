@@ -132,9 +132,13 @@ class AICarbon : public OXPlayer
 
     // debugging - sprawdzanie spojnosci danych
     bool check();
+
+    long start_time;
+    long getTime();
+    long stopTime();
 };
 
-extern void brain_checkTimeout();
+extern int info_timeout_turn, info_time_left;
 extern int terminateAI;
 
 #endif

@@ -18,7 +18,8 @@
 
 #pragma comment(lib,"comctl32.lib")
 
-void brain_checkTimeout(){}
+int info_timeout_turn=1000; /* time for one turn in milliseconds */
+int info_time_left=1000000000; /* left time for a game */
 int terminateAI = 0;
 
 int va, vb;
@@ -316,7 +317,7 @@ void OnCreate(HWND hWnd)
 {
   aiThinking = false;
   playerO = playerX = currPlayer = 0;
-  iPlayerO = iPlayerX = 0;
+  iPlayerO = 2; iPlayerX = 0;
   // deaktywowanie polecenia UNDO
   hMenu = GetMenu(hWnd);
   EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED);

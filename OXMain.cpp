@@ -134,7 +134,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 CW_USEDEFAULT, CW_USEDEFAULT,
                 clientWidth, clientHeight,
                 NULL, NULL, hInstance, NULL);
-  
+
+  HACCEL haccel = LoadAccelerators(hInstance, "Accel");
+
   hWndLog = CreateDialog(hInstance, "LogDialog", 0, LogDialogProc);
   //ShowWindow(hWndLog, nCmdShow);
   
@@ -142,11 +144,12 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   while(GetMessage(&msg, NULL, 0, 0))
     {
-      if (!IsDialogMessage(hWndLog, &msg))
-        {
-          TranslateMessage(&msg);
-          DispatchMessage(&msg);
-        }
+      if(!TranslateAccelerator(hWndMain, haccel, &msg))
+        if (!IsDialogMessage(hWndLog, &msg))
+          {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+          }
     }
 
   return msg.wParam;

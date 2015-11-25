@@ -5,9 +5,9 @@ MainMenu MENU DISCARDABLE
 BEGIN
     POPUP "Game"
     BEGIN
-        MENUITEM "New...",         IDM_FILE_NEW
+        MENUITEM "New...\tF2",      IDM_FILE_NEW
         MENUITEM SEPARATOR
-        MENUITEM "Undo",           IDM_FILE_UNDO
+        MENUITEM "Undo\tBackspace", IDM_FILE_UNDO
         MENUITEM SEPARATOR
         MENUITEM "Exit",           IDM_FILE_EXIT
     END
@@ -24,8 +24,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
 
   DEFPUSHBUTTON "Start",        ID_BUTTON_START,   69, 72, 49, 15
-  DEFPUSHBUTTON "Cancel",       ID_BUTTON_CANCEL, 123, 72, 49, 15
-  DEFPUSHBUTTON "Switch Sides", ID_BUTTON_SWITCH, 177, 72, 49, 15
+  PUSHBUTTON "Cancel",       ID_BUTTON_CANCEL, 123, 72, 49, 15
+  PUSHBUTTON "Switch Sides", ID_BUTTON_SWITCH, 177, 72, 49, 15
   
   LTEXT         "Player Name",    ID_TEXT_NAME,   21, 5, 40, 8
   LTEXT         "Search Depth",   ID_TEXT_DEPTH, 181, 5, 60, 8
@@ -55,6 +55,12 @@ FONT 8, "MS Sans Serif"
 BEGIN
   LISTBOX      ID_LOG_O,   0, 0, 120, 240, WS_VSCROLL
   LISTBOX      ID_LOG_X, 120, 0, 120, 240, WS_VSCROLL
+END
+
+Accel ACCELERATORS MOVEABLE PURE
+BEGIN
+VK_F2, IDM_FILE_NEW, VIRTKEY
+VK_BACK, IDM_FILE_UNDO, VIRTKEY
 END
 
 #ifdef APSTUDIO_INVOKED

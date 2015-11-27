@@ -109,6 +109,7 @@ void AICarbon::_move(int xp, int yp)
   nSt[1][cell[xp][yp].status4[1]]--;
   
   cell[xp][yp].piece = who;
+  remCell[moveCount] = &cell[xp][yp];
   remMove[moveCount] = OXPoint(xp, yp);
   remULCand[moveCount] = upperLeftCand;
   remLRCand[moveCount] = lowerRightCand;
@@ -187,16 +188,17 @@ void AICarbon::undo()
   upperLeftCand = remULCand[moveCount];
   lowerRightCand = remLRCand[moveCount];
 
-  cell[xp][yp].update1(0);
-  cell[xp][yp].update1(1);
-  cell[xp][yp].update1(2);
-  cell[xp][yp].update1(3);
-  cell[xp][yp].update4();
+  OXCell* c = remCell[moveCount];
+  c->update1(0);
+  c->update1(1);
+  c->update1(2);
+  c->update1(3);
+  c->update4();
 
-  nSt[0][cell[xp][yp].status4[0]]++;
-  nSt[1][cell[xp][yp].status4[1]]++;
+  nSt[0][c->status4[0]]++;
+  nSt[1][c->status4[1]]++;
   
-  cell[xp][yp].piece = EMPTY;
+  c->piece = EMPTY;
   
   // zamiana graczy    
   who = OPPONENT(who);

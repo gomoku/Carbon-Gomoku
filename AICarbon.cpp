@@ -138,15 +138,14 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 // ----------------------------------------------------------------------------
 int AICarbon::evaluate()
 {
-  int a, i, k, p[2] = {0, 0}, x, y;
+  int a, i, k, p[2] = {0, 0};
   for (i = 0; i < moveCount; i++)
     {
-      x = remMove[i].x;
-      y = remMove[i].y;
-      a = cell[ x ][ y ].piece;
+      OXCell* c = remCell[i];
+      a = c->piece;
       for (k = 0; k < 4; k++)
         {
-          p[a] += RANK[ CONFIG[ cell[x][y].pattern[k][a] ][ cell[x][y].pattern[k][1-a] ] ];
+          p[a] += RANK[CONFIG[c->pattern[k][a]][c->pattern[k][1 - a]]];
         }
     }
   return p[who] - p[opp];

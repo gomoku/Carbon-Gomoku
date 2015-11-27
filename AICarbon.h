@@ -113,6 +113,7 @@ class AICarbon : public OXPlayer
     // ------------------------------------------------------------------------
     // history stack
     OXPoint remMove[MAX_CELLS];   // zapamietuje kolejne ruchy
+    OXCell* remCell[MAX_CELLS];   // zapamietuje kolejne ruchy
     OXPoint remULCand[MAX_CELLS]; // zapamietuje <upperLeftCand>
     OXPoint remLRCand[MAX_CELLS]; // zapamietuje <lowerRightCand> 
 

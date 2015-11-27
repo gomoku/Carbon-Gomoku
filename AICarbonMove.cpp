@@ -11,7 +11,8 @@ void AICarbon::start(int size)
 
 void AICarbon::start(int width, int height)
 {
-  int x, y, xx, yy, k, p;
+  int x, y, xx, yy, k;
+  UCHAR p;
 
   init();
 
@@ -177,7 +178,7 @@ void AICarbon::_move(int xp, int yp)
 void AICarbon::undo()
 {
   int x, y, k;
-  unsigned char p;
+  UCHAR p;
   int xp, yp;
 
   assert(check());

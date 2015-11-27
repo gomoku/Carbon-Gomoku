@@ -1,16 +1,16 @@
-Gomoku game (Five in a Row) playing program with a really strong advanced artificial intelligence algorithm (evaluation function, mini-max with cut offs, alpha-beta, transposition table, situation signatures, candidate generating, expert knowledge, further enhancements). Very heavly documented in author's native language (polish) - see Documentation_PL folder.  The AI algorithm was really one of the strongest as for 2002 and it's also reasonable even now in 2015.
+Gomoku game (Five in a Row) playing program with a strong artificial intelligence algorithm (evaluation function, mini-max with cut offs, alpha-beta, transposition table, situation signatures, candidate generating). Documented in author's native language (Polish) - see Documentation_PL folder. The algorithm was one of the strongest in 2002 (the project is over 13 years old!).
 
-Original author: Michał Czardybon
-Original website: http://mczard.republika.pl/gomoku.en.html
-Email:  mczard@poczta.onet.pl
-Country: Poland
-Programming language: C++
-IDE: Visual Studio 6.0 project (works also in 7.1) 
-Year: 2002 (the project is over 13 years old!)
-Notes: First time on any source code repository.
+Visual Studio solution includes 2 projects:
+- CarbonAI project creates executable which can be used to play game in [Piskvork](https://sourceforge.net/projects/piskvork/). It can also participate in the [Gomocup tournament](http://gomocup.org/).
+- Gomoku project is simple standalone UI. 
 
-Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect, Connect5, Connect6, Caro, Noughts and Crosses, Gomoku, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, AI, Engine, Artificial Intelligence, Brain, Pbrain, Gra, Game, Source Code Files, Program, Programming, Github, Board, Coding.
+* Original author: Michał Czardybon
+* Original website: http://mczard.republika.pl/gomoku.en.html
+* Programming language: C++
+* OS: Windows
 
-![Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect, Connect5, Connect6, Caro, Noughts and Crosses, Gomoku, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, AI, Engine, Artificial Intelligence, Brain, Pbrain, Gra, Game, Source Code Files, Program, Programming, Github, Board, Coding.](Documentation_PL/screen2.gif "Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect, Connect5, Connect6, Caro, Noughts and Crosses, Gomoku, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, AI, Engine, Artificial Intelligence, Brain, Pbrain, Gra, Game, Source Code Files, Program, Programming, Github, Board, Coding.")
+Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect5, Caro, Noughts and Crosses, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, Pbrain, Gra, Board Game.
 
-![Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect, Connect5, Connect6, Caro, Noughts and Crosses, Gomoku, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, AI, Engine, Artificial Intelligence, Brain, Pbrain, Gra, Game, Source Code Files, Program, Programming, Github, Board, Coding.](Documentation_PL/screen1.gif "Tags: Five in a Row, Tic Tac Toe, TicTacToe, 5 in a Row, Go-Moku, Connect, Connect5, Connect6, Caro, Noughts and Crosses, Gomoku, Renju, Pente, Piskvork, Amoba, Kółko i Krzyżyk, Gomocup, AI, Engine, Artificial Intelligence, Brain, Pbrain, Gra, Game, Source Code Files, Program, Programming, Github, Board, Coding.")
+![Gomoku](Documentation_PL/screen2.gif)
+
+![Gomoku](Documentation_PL/screen1.gif)

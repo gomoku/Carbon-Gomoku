@@ -13,8 +13,8 @@ class Timer
 {
   public:
     Timer() {reset();}
-    void   start() {start_time = GetTickCount();}
-    void   stop()  { _time += (double)(GetTickCount() - start_time) / 1000; }
+    void   start() { start_time = getTime(); }
+    void   stop()  { _time += (double)(getTime() - start_time) / 1000; }
     void   reset() {_time = 0;}
     double time()  {return _time;}
   private:

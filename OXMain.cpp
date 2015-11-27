@@ -21,8 +21,6 @@
 int info_timeout_turn=1000; /* time for one turn in milliseconds */
 int info_time_left=1000000000; /* left time for a game */
 int terminateAI;
-long getTime() { return (long)GetTickCount(); }
-
 
 int va, vb;
 // Komunikat - komputer skonczyl liczyc
@@ -670,5 +668,17 @@ void WriteLog(int points, int nSearched, int speed, int depth)
     }
   sprintf(lpszCap, "%d : %d", nTotalO, nTotalX);
   SetWindowText(hWndLog, lpszCap);
+}
+// -----------------------------------------------------------------------------
+long getTime()
+{
+  static LARGE_INTEGER freq;
+  if(!freq.QuadPart){
+    QueryPerformanceFrequency(&freq);
+    if(!freq.QuadPart) return GetTickCount();
+  }
+  LARGE_INTEGER c;
+  QueryPerformanceCounter(&c);
+  return (long)(c.QuadPart * 1000 / freq.QuadPart);
 }
 // -----------------------------------------------------------------------------

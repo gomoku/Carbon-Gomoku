@@ -23,7 +23,6 @@
     <ClInclude Include="AICarbonHash.h" />
     <ClInclude Include="AISimple.h" />
     <ClInclude Include="OXGame.h" />
-    <ClInclude Include="OXLog.h" />
     <ClInclude Include="OXPlayer.h" />
     <ClInclude Include="OXTypes.h" />
     <ClInclude Include="Random.h" />

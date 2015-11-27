@@ -94,7 +94,6 @@ void GetValues(HWND hWnd);
 // Prototypy funkcji dla okienka dialogowego Log
 // -----------------------------------------------------------------------------
 BOOL CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-void WriteLog(int points, int nSearched, int speed);
 void ClearLog();
 int  nTotalO, nTotalX; // searched
 // -----------------------------------------------------------------------------
@@ -356,6 +355,10 @@ void OnCommand(HWND hWnd, WPARAM wParam)
         EnableMenuItem(hMenu, IDM_FILE_UNDO, MF_GRAYED);
         break;
 
+      case IDM_FILE_LOG:
+        ShowWindow(hWndLog, SW_SHOW);
+        break;
+
       case IDM_HELP_ABOUT:
         MessageBox(hWnd, "Carbon Gomoku 2.2 (" __DATE__ ")\nauthor: Micha³ Czardybon", "About", 0);
         break;
@@ -508,6 +511,7 @@ BOOL CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
               return TRUE;
             
             case ID_BUTTON_CANCEL:
+            case IDCANCEL:
               GetValues(hWnd);
               EndDialog(hWnd, 0);
               return TRUE;
@@ -629,8 +633,7 @@ BOOL CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return TRUE;
 
       case WM_CLOSE:
-        DestroyWindow(hWndLog);
-        hWndLog = 0;
+        ShowWindow(hWnd, SW_HIDE);
         return TRUE;
     }
   return FALSE;
@@ -641,16 +644,20 @@ void ClearLog()
   nTotalO = nTotalX = 0;
   SendDlgItemMessage(hWndLog, ID_LOG_O, LB_RESETCONTENT, 0, 0);
   SendDlgItemMessage(hWndLog, ID_LOG_X, LB_RESETCONTENT, 0, 0);
+
+  char* header = "points searched speed depth";
+  SendDlgItemMessage(hWndLog, ID_LOG_O, LB_ADDSTRING, 0, (LPARAM)header);
+  SendDlgItemMessage(hWndLog, ID_LOG_X, LB_ADDSTRING, 0, (LPARAM)header);
 }
 // -----------------------------------------------------------------------------
-void WriteLog(int points, int nSearched, int speed)
+void WriteLog(int points, int nSearched, int speed, int depth)
 {
   char lpszStr[128];
   char lpszCap[128];
 
   if(terminateAI == 9) return;
 
-  sprintf(lpszStr, "%6d %7d %6d", points, nSearched, speed);
+  sprintf(lpszStr, "%6d%9d%6d%4d", points, nSearched, speed, depth);
   if (currPlayer == playerO)
     {
       nTotalO += nSearched;

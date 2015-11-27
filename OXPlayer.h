@@ -31,4 +31,6 @@ class OXPlayer
     virtual const char* name() const = 0;
 };
 
+void WriteLog(int points, int nSearched, int speed, int depth);
+
 #endif

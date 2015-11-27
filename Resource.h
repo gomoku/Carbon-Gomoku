@@ -8,6 +8,7 @@
 #define IDM_FILE_EXIT      40002
 #define IDM_FILE_UNDO      40003
 #define IDM_HELP_ABOUT     40004
+#define IDM_FILE_LOG       40005
 
 #define ID_BUTTON_START    101
 #define ID_BUTTON_CANCEL   102

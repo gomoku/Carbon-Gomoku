@@ -112,7 +112,6 @@
   <ItemGroup>
     <ClInclude Include="AICarbon.h" />
     <ClInclude Include="AICarbonHash.h" />
-    <ClInclude Include="OXLog.h" />
     <ClInclude Include="OXPlayer.h" />
     <ClInclude Include="OXTypes.h" />
     <ClInclude Include="pisqpipe.h" />

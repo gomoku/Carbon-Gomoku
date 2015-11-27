@@ -141,10 +141,6 @@ SOURCE=.\OXGame.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\OXLog.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\OXPlayer.h
 # End Source File
 # Begin Source File

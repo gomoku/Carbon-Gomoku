@@ -47,9 +47,6 @@
     <ClInclude Include="OXPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OXLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CONFIG.CPP">
       <Filter>Data Files</Filter>
     </ClInclude>

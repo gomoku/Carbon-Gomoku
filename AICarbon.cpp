@@ -1,5 +1,4 @@
 #include "AICarbon.h"
-#include "OXLog.h"
 #include <time.h>
 #include <iostream>
 #include <stdio.h>
@@ -87,7 +86,7 @@ long AICarbon::stopTime()
 {
   return start_time + __min(info_timeout_turn, info_time_left / MATCH_SPARE) - 30;
 }
-
+// ----------------------------------------------------------------------------
 void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 {
   int i;
@@ -123,6 +122,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
       if(terminateAI && i>4) break;
       x= best.x - 4;
       y= best.y - 4;
+      depth = i;
 
       t1=getTime();
       if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) - stopTime() >= 0) break;
@@ -131,7 +131,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 
   totalSearched += nSearched;
   
-  WriteLog(best.value, nSearched, (int)(nSearched / (getTime()-start_time+1)));
+  WriteLog(best.value, nSearched, (int)(nSearched / (getTime()-start_time+1)), depth);
 
   assert(!(x < 0 || x >= boardWidth || y < 0 || y >= boardHeight));
 }

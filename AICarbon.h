@@ -52,7 +52,7 @@ class AICarbon : public OXPlayer
     void yourTurn(int &x, int &y, int depth = 0, int time = 0);
     void undo(); 
     const char* name() const {return "AICarbon";}
-
+    AICarbon(){ init(); }
 
   private:
     static const int WIN_MIN;  // wygrana w bardzo wielu ruchach

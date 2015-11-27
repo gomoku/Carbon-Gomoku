@@ -94,7 +94,8 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
   OXMove best;
 
   start_time = getTime();
-  nSearched = 0;
+  int turnSearched = 0;
+  table.resize(50000);
 
   if(moveCount == 0)
   {
@@ -108,7 +109,9 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
   if(depth > 0)
   {
     if(time == 0) info_timeout_turn = 1000000;
+    nSearched = 0;
     best = minimax(depth, true, -INF, INF);
+    turnSearched = nSearched;
     x= best.x - 4;
     y= best.y - 4;
   }
@@ -117,21 +120,25 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
     for(i=2; i <= 50; i++)
     {
       t0=getTime();
-
+      
+      nSearched = 0;
       best = minimax(i, true, -INF, INF);
+      turnSearched += nSearched;
+
       if(terminateAI && i>4) break;
       x= best.x - 4;
       y= best.y - 4;
       depth = i;
+      table.resize(nSearched * 2);
 
       t1=getTime();
       if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) - stopTime() >= 0) break;
     }
   }
 
-  totalSearched += nSearched;
+  totalSearched += turnSearched;
   
-  WriteLog(best.value, nSearched, (int)(nSearched / (getTime()-start_time+1)), depth);
+  WriteLog(best.value, turnSearched, (int)(turnSearched / (getTime() - start_time + 1)), depth);
 
   assert(!(x < 0 || x >= boardWidth || y < 0 || y >= boardHeight));
 }

@@ -18,8 +18,7 @@ void brain_init()
 
 void brain_restart()
 {
-  delete ai;
-  ai = new AICarbon();
+  if(!ai) ai = new AICarbon();
   ai->start(width, height);
   pipeOut("OK");
 }

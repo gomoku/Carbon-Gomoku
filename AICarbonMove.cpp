@@ -14,8 +14,6 @@ void AICarbon::start(int width, int height)
   int x, y, xx, yy, k;
   UCHAR p;
 
-  init();
-
   boardWidth = width;
   boardHeight = height;
   // wypelnianie planszy wartosciami poczatkowymi
@@ -82,6 +80,7 @@ void AICarbon::start(int width, int height)
 // xp, yp in <0, boardSize)
 void AICarbon::move(int xp, int yp)
 {
+  table.resize(1);
   _move(xp + 4, yp + 4);
 }
 // ----------------------------------------------------------------------------

@@ -29,6 +29,8 @@ class OXPlayer
     
     // zwraca nazwe AI
     virtual const char* name() const = 0;
+
+    virtual ~OXPlayer(){};
 };
 
 void WriteLog(int points, int nSearched, int speed, int depth);

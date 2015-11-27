@@ -9,14 +9,16 @@
 #ifndef _AICARBONHASH
 #define _AICARBONHASH
 
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
 #include "OXTypes.h"
 
 #include "hashValA.cpp"
 #include "hashValB.cpp"
 #include "hashValC.cpp"
 
-//const ULONG hashASize = 524288;
-const ULONG hashASize = 65536;
+extern int info_max_memory;
 
 class HashTable
 {
@@ -25,14 +27,7 @@ class HashTable
     // kasowanie wszystkiego
     void clear()
     {
-      for (int i = 0; i < hashASize; i++)
-        {
-          elem[i].depth =
-          elem[i].moves =
-          elem[i].value = 0;
-          elem[i].hashB = 
-          elem[i].hashC = 0;
-        }
+      hashASize = 0;
     }
      
     // czy aktualna pozycja jest zapamietana
@@ -76,6 +71,38 @@ class HashTable
       elem[hashA].best  = _best;
     }
 
+    void resize(ULONG size)
+    {
+      if(size > hashASize)
+      {
+        ULONG maxBytes = info_max_memory;
+        if(maxBytes == 0) maxBytes = 1000000000; //1GB
+        maxBytes = __max(maxBytes, 7500000) - 7000000;
+        ULONG num = maxBytes / sizeof(HashRec);
+
+        if(maxSize * 2 < num || maxSize > num){
+          elem = (HashRec*)realloc(elem, maxBytes);
+          maxSize = num;
+        }
+        if(hashASize < maxSize){
+          hashASize = __min(size * 2, maxSize);
+          memset(elem, 0, hashASize * sizeof(HashRec));
+        }
+      }
+    }
+
+    HashTable()
+    {
+      maxSize = 0;
+      hashASize = 0;
+      elem = 0;
+    }
+
+    ~HashTable()
+    {
+      if(elem) free(elem);
+    }
+
   private:
     struct HashRec
     {
@@ -86,8 +113,9 @@ class HashTable
       OXPoint best;
     };
 
+    ULONG hashASize, maxSize;
     ULONG   hashA, hashB, hashC; // sygnatura biezacej sytuacji
-    HashRec elem[hashASize];     // tablica
+    HashRec* elem;     // tablica
 };
 
 #endif

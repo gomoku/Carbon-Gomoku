@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
+#include <assert.h>
 #include "OXTypes.h"
 
 #include "hashValA.cpp"
@@ -50,7 +51,8 @@ class HashTable
     void undo(int x, int y, OXPiece who)
     {
       int offset = x + (y << 5) + (who << 10);
-      hashA = (hashA - hashValA[offset]) % hashASize;
+      hashA = ((int)(hashA - hashValA[offset]) % (int)hashASize);
+      if((int)hashA < 0) hashA += hashASize;
       hashB = (hashB - hashValB[offset]);
       hashC = (hashC - hashValC[offset]);
     }
@@ -96,6 +98,10 @@ class HashTable
       maxSize = 0;
       hashASize = 0;
       elem = 0;
+
+#ifndef NDEBUG
+      for(int n = 0; n < 2048; n++) assert(hashValA[n] < 2000000000);
+#endif
     }
 
     ~HashTable()

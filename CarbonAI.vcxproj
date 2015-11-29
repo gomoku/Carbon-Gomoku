@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>pbrain-$(ProjectName)</TargetName>
+    <TargetName>pbrain-carbon</TargetName>
     <OutDir>$(SolutionDir)$(Configuration)AI\</OutDir>
     <IntDir>$(Configuration)AI\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>pbrain-$(ProjectName)</TargetName>
+    <TargetName>pbrain-carbon</TargetName>
     <OutDir>$(SolutionDir)$(Configuration)AI\</OutDir>
     <IntDir>$(Configuration)AI\</IntDir>
   </PropertyGroup>

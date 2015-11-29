@@ -249,6 +249,15 @@ void AICarbon::undo()
   assert(check());
 }
 
+int AICarbon::undo(int x, int y)
+{
+  if(moveCount > 0 && remMove[moveCount - 1].x == x + 4 && remMove[moveCount - 1].y == y + 4){
+    undo();
+    return 0;
+  }
+  return 1;
+}
+
 bool AICarbon::check()
 {
   int n[2][9];

@@ -51,6 +51,7 @@ class AICarbon : public OXPlayer
     void move(int x, int y);
     void yourTurn(int &x, int &y, int depth = 0, int time = 0);
     void undo(); 
+    int undo(int x, int y);
     const char* name() const {return "AICarbon";}
     AICarbon(){ init(); }
 

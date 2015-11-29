@@ -2,15 +2,19 @@
 #include <windows.h>
 #include "AICarbon.h"
 
-const char *infotext="name=\"Carbon\", author=\"Michal Czardybon\", version=\"2.1\", country=\"Poland\", www=\"http://mczard.republika.pl/gomoku.en.html\"";
+const char *infotext="name=\"Carbon\", author=\"Michal Czardybon\", version=\"2.2\", country=\"Poland\", www=\"http://mczard.republika.pl/gomoku.en.html\"";
 
 AICarbon *ai;
 
 
 void brain_init()
 {
-  if(width<5 || width>MAX_BOARD_SIZE || height<5 || height>MAX_BOARD_SIZE){
-    pipeOut("ERROR size of the board");
+  if(width<5 || height < 5){
+    pipeOut("ERROR Invalid size of the board");
+    return;
+  }
+  if(width > MAX_BOARD_SIZE || height>MAX_BOARD_SIZE){
+    pipeOut("ERROR Maximal board size is %d", MAX_BOARD_SIZE);
     return;
   }
   brain_restart();
@@ -40,7 +44,7 @@ void brain_block(int x, int y)
 
 int brain_takeback(int x, int y)
 {
-  return 1;
+  return ai->undo(x, y);
 }
 
 void brain_turn()

@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #define MATCH_SPARE 7      //how much is time spared for the rest of game
-#define TIMEOUT_PREVENT 5  //how much is alfabeta slower when the depth is increased
+#define TIMEOUT_PREVENT 5  //how much is minimax slower when the depth is increased
 
 const int AICarbon::WIN_MIN = 25000;
 const int AICarbon::WIN_MAX = 30000;
@@ -89,8 +89,8 @@ long AICarbon::stopTime()
 // ----------------------------------------------------------------------------
 void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 {
-  int i;
-  long t0, t1;
+  int prevSearched;
+  long t0, t1, td;
   OXMove best;
 
   start_time = getTime();
@@ -117,28 +117,36 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
   }
   else
   {
-    for(i=2; i <= 50; i++)
+    prevSearched = 0;
+    for(depth = 2; depth <= 50; depth++)
     {
       t0=getTime();
       
       nSearched = 0;
-      best = minimax(i, true, -INF, INF);
+      best = minimax(depth, true, -INF, INF);
       turnSearched += nSearched;
 
-      if(terminateAI && i>4) break;
+      if(terminateAI && depth > 4){
+        depth = 0; //timeout
+        break;
+      }
       x= best.x - 4;
       y= best.y - 4;
-      depth = i;
       table.resize(nSearched * 2);
 
       t1=getTime();
-      if(terminateAI || t1 + TIMEOUT_PREVENT*(t1 - t0) - stopTime() >= 0) break;
+      td = t1 - t0;
+      if(terminateAI || t1 + TIMEOUT_PREVENT * td - stopTime() >= 0 || nSearched == prevSearched) break;
+      
+      WriteLog(best.value, nSearched, td == 0 ? 0 : nSearched / td, depth, true);
+      prevSearched = nSearched;
     }
   }
 
   totalSearched += turnSearched;
   
-  WriteLog(best.value, turnSearched, (int)(turnSearched / (getTime() - start_time + 1)), depth);
+  td = getTime() - start_time;
+  WriteLog(best.value, nSearched, td == 0 ? 0 : turnSearched / td, depth, false);
 
   assert(!(x < 0 || x >= boardWidth || y < 0 || y >= boardHeight));
 }

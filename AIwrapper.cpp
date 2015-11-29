@@ -60,9 +60,10 @@ void brain_end()
   delete ai;
 }
 
-void WriteLog(int points, int nSearched, int speed, int depth)
+void WriteLog(int points, int nSearched, int speed, int depth, bool debug)
 {
-  pipeOut("DEBUG points %d, nodes %d, speed %d, depth %d", points, nSearched, speed, depth);
+  pipeOut("%s eval %d, depth %d, nodes %d, speed %d", debug ? "DEBUG" : "MESSAGE", 
+    points, depth, nSearched, speed);
 }
 
 long getTime()

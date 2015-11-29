@@ -33,6 +33,6 @@ class OXPlayer
     virtual ~OXPlayer(){};
 };
 
-void WriteLog(int points, int nSearched, int speed, int depth);
+void WriteLog(int points, int nSearched, int speed, int depth, bool debug);
 
 #endif

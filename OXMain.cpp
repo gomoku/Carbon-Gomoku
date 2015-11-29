@@ -649,7 +649,7 @@ void ClearLog()
   SendDlgItemMessage(hWndLog, ID_LOG_X, LB_ADDSTRING, 0, (LPARAM)header);
 }
 // -----------------------------------------------------------------------------
-void WriteLog(int points, int nSearched, int speed, int depth)
+void WriteLog(int points, int nSearched, int speed, int depth, bool debug)
 {
   char lpszStr[128];
   char lpszCap[128];

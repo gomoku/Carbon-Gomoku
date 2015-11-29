@@ -75,8 +75,8 @@ static void parse_3int_chk(const char *param, int *x, int *y, int *z)
 static const char *get_cmd_param(const char *command, const char *input)
 {
 	int n1, n2;
-	n1=strlen(command);
-	n2=strlen(input);
+	n1=(int)strlen(command);
+	n2=(int)strlen(input);
 	if(n1>n2 || _strnicmp(command, input, n1)) return NULL; /* it is not command */
 	input+=strlen(command);
 	while(isspace(input[0])) input++;

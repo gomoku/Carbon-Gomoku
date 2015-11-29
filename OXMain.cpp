@@ -84,7 +84,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // -----------------------------------------------------------------------------
 // Prototypy funkcji obslugujacych okienko dialogowe NewGame
 // -----------------------------------------------------------------------------
-BOOL CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void OnInitDialog(HWND hWnd);
 void SwitchPlayers(HWND hWnd);
 void UpdateControls(HWND hWnd);
@@ -92,7 +92,7 @@ void GetValues(HWND hWnd);
 // -----------------------------------------------------------------------------
 // Prototypy funkcji dla okienka dialogowego Log
 // -----------------------------------------------------------------------------
-BOOL CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+INT_PTR CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void ClearLog();
 int  nTotalO, nTotalX; // searched
 // -----------------------------------------------------------------------------
@@ -152,7 +152,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
           }
     }
 
-  return msg.wParam;
+  return (int)msg.wParam;
 }
 // -----------------------------------------------------------------------------
 // Standard Windows API window's procedure
@@ -493,7 +493,7 @@ void OnPaint(HWND hWnd)
 // -----------------------------------------------------------------------------
 // Procedura okna dialogowego NewGame
 // -----------------------------------------------------------------------------
-BOOL CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg)
     {
@@ -522,7 +522,7 @@ BOOL CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             case ID_COMBO_O:
               if (HIWORD(wParam) == CBN_SELCHANGE)
                 {
-                  iPlayerO = SendDlgItemMessage(hWnd, ID_COMBO_O, CB_GETCURSEL, 0, 0);
+                  iPlayerO = (int)SendDlgItemMessage(hWnd, ID_COMBO_O, CB_GETCURSEL, 0, 0);
                   GetValues(hWnd);
                   UpdateControls(hWnd);
                 }
@@ -531,7 +531,7 @@ BOOL CALLBACK NewGameDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             case ID_COMBO_X:
               if (HIWORD(wParam) == CBN_SELCHANGE)
                 {
-                  iPlayerX = SendDlgItemMessage(hWnd, ID_COMBO_X, CB_GETCURSEL, 0, 0);
+                  iPlayerX = (int)SendDlgItemMessage(hWnd, ID_COMBO_X, CB_GETCURSEL, 0, 0);
                   GetValues(hWnd);
                   UpdateControls(hWnd);
                 }
@@ -614,15 +614,15 @@ void UpdateControls(HWND hWnd)
 // -----------------------------------------------------------------------------
 void GetValues(HWND hWnd)
 {
-  oSearchDepth = SendDlgItemMessage(hWnd, ID_SPIN_DEPTH_O, UDM_GETPOS, 0, 0);
-  xSearchDepth = SendDlgItemMessage(hWnd, ID_SPIN_DEPTH_X, UDM_GETPOS, 0, 0);
-  oTimeLimit = SendDlgItemMessage(hWnd, ID_SPIN_TIME_O, UDM_GETPOS, 0, 0);
-  xTimeLimit = SendDlgItemMessage(hWnd, ID_SPIN_TIME_X, UDM_GETPOS, 0, 0);
+  oSearchDepth = (int)SendDlgItemMessage(hWnd, ID_SPIN_DEPTH_O, UDM_GETPOS, 0, 0);
+  xSearchDepth = (int)SendDlgItemMessage(hWnd, ID_SPIN_DEPTH_X, UDM_GETPOS, 0, 0);
+  oTimeLimit = (int)SendDlgItemMessage(hWnd, ID_SPIN_TIME_O, UDM_GETPOS, 0, 0);
+  xTimeLimit = (int)SendDlgItemMessage(hWnd, ID_SPIN_TIME_X, UDM_GETPOS, 0, 0);
 }
 // -----------------------------------------------------------------------------
 // Procedura okna dialogowego Log
 // -----------------------------------------------------------------------------
-BOOL CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK LogDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   switch (uMsg)
     {

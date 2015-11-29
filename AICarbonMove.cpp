@@ -64,15 +64,13 @@ void AICarbon::start(int width, int height)
   int i, j;
   for (i = 0; i < 2; i++) for (j = 0; j < 9; j++) nSt[i][j] = 0;
 
-  x = width / 2 + 4;
-  y = height / 2 + 4;
   totalSearched = 0;
   who = OP;
   opp = XP;
   moveCount = 0;
   
-  upperLeftCand = OXPoint(x - 1, y - 1);
-  lowerRightCand = OXPoint(x + 1, y + 1);
+  upperLeftCand = OXPoint(99, 99);
+  lowerRightCand = OXPoint(0, 0);
   
   table.clear();
 }
@@ -115,16 +113,11 @@ void AICarbon::_move(int xp, int yp)
   remLRCand[moveCount] = lowerRightCand;
   moveCount++;
 
-  if (xp < upperLeftCand.x + 2) upperLeftCand.x = xp - 2;
-  if (yp < upperLeftCand.y + 2) upperLeftCand.y = yp - 2;
-  if (xp > lowerRightCand.x - 2) lowerRightCand.x = xp + 2;
-  if (yp > lowerRightCand.y - 2) lowerRightCand.y = yp + 2;
+  if(xp - 2 < upperLeftCand.x) upperLeftCand.x = __max(xp - 2, 4);
+  if(yp - 2 < upperLeftCand.y) upperLeftCand.y = __max(yp - 2, 4);
+  if(xp + 2 > lowerRightCand.x) lowerRightCand.x = __min(xp + 2, boardWidth + 3);
+  if(yp + 2 > lowerRightCand.y) lowerRightCand.y = __min(yp + 2, boardHeight + 3);
   
-  if (upperLeftCand.x < 4) upperLeftCand.x = 4;
-  if (upperLeftCand.y < 4) upperLeftCand.y = 4;
-  if (lowerRightCand.x > boardWidth + 3) lowerRightCand.x = boardWidth + 3;
-  if (lowerRightCand.y > boardHeight + 3) lowerRightCand.y = boardHeight + 3;
-
   // modyfikowanie <pat> i <points>         
   for (k = 0; k < 4; k++)
     {

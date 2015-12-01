@@ -23,7 +23,20 @@ extern int info_max_memory;
 
 class HashTable
 {
-  public:
+private:
+
+  struct HashRec
+  {
+    ULONG   hashB, hashC;
+    short   value;
+    short   depth;
+#ifndef NDEBUG
+    short   moves;
+#endif
+    OXPoint best;
+  };
+
+public:
     
     // kasowanie wszystkiego
     void clear()
@@ -34,8 +47,7 @@ class HashTable
     // czy aktualna pozycja jest zapamietana
     bool present()
     {
-      return elem[hashA].hashB == hashB &&
-             elem[hashA].hashC == hashC;
+      return currentItem->hashB == hashB && currentItem->hashC == hashC;
     }
 
     // uwzglednij wykonanie ruchu
@@ -43,6 +55,7 @@ class HashTable
     {
       int offset = x + (y << 5) + (who << 10);
       hashA = (hashA + hashValA[offset]) % hashASize;
+      currentItem = &elem[hashA];
       hashB = (hashB + hashValB[offset]);
       hashC = (hashC + hashValC[offset]);
     }
@@ -53,24 +66,30 @@ class HashTable
       int offset = x + (y << 5) + (who << 10);
       hashA = ((int)(hashA - hashValA[offset]) % (int)hashASize);
       if((int)hashA < 0) hashA += hashASize;
+      currentItem = &elem[hashA];
       hashB = (hashB - hashValB[offset]);
       hashC = (hashC - hashValC[offset]);
     }
 
-    short   value() {return elem[hashA].value;} // wartosc pozycji
-    short   depth() {return elem[hashA].depth;} // glebokosc na jaka zostala przeszukana 
-    short   moves() {return elem[hashA].moves;} // ktory to ruch od poczatku gry
-    OXPoint best()  {return elem[hashA].best;}  // najlepszy ruch w tej sytuacji
+    short   value() {return currentItem->value; } // wartosc pozycji
+    short   depth() {return currentItem->depth;} // glebokosc na jaka zostala przeszukana 
+#ifndef NDEBUG
+    short   moves() {return currentItem->moves;} // ktory to ruch od poczatku gry
+#endif
+    OXPoint best()  {return currentItem->best;}  // najlepszy ruch w tej sytuacji
 
     // zapamietuje biezaca sytuacje
     void   update(short _value, short _depth, short _moves, OXPoint _best)
     {
-      elem[hashA].value = _value;
-      elem[hashA].depth = _depth;  
-      elem[hashA].moves = _moves;
-      elem[hashA].hashB = hashB;
-      elem[hashA].hashC = hashC;
-      elem[hashA].best  = _best;
+      HashRec* c = currentItem;
+      c->value = _value;
+      c->depth = _depth;
+#ifndef NDEBUG
+      c->moves = _moves;
+#endif
+      c->hashB = hashB;
+      c->hashC = hashC;
+      c->best  = _best;
     }
 
     void resize(ULONG size)
@@ -110,15 +129,7 @@ class HashTable
     }
 
   private:
-    struct HashRec
-    {
-      ULONG   hashB, hashC;
-      short   value;
-      short   depth;
-      short   moves;
-      OXPoint best;
-    };
-
+    HashRec* currentItem;
     ULONG hashASize, maxSize;
     ULONG   hashA, hashB, hashC; // sygnatura biezacej sytuacji
     HashRec* elem;     // tablica

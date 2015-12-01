@@ -336,6 +336,8 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
       return OXMove(0, 0, evaluate());
     }
 
+  h--;
+
   // lista kandydujacych ruchow
   OXCand  cnd[MAX_CAND]; // elementy
   int     nCnd;          // ich liczba
@@ -355,18 +357,24 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   // symulowanie ruchow
   for (i = 0; i < nCnd; i++)
     {
-      _move(cnd[i].x, cnd[i].y);
-      
+      table.move(cnd[i].x, cnd[i].y, who);
+
       assert(best.value <= beta);
       
-      if (table.present() && table.depth() == h - 1)
+      if (table.present() && table.depth() == h)
         {
+          nSearched++;
+          assert(table.moves() == moveCount);
           value = table.value();  // ten przypadek jest juz obliczony
+
+          table.undo(cnd[i].x, cnd[i].y, who);
         }
       else
         {
           short  vA, vB;
           OXMove m;
+
+          _move(cnd[i].x, cnd[i].y, false);
 
           // okno poszukiwania
           vA = -beta;              // Nie wazne czy ruch ma wartosc <beta>, czy +INF.
@@ -377,7 +385,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
           if (vB >= +WIN_MIN) vB++;
           if (vA <= -WIN_MIN) vA--;
       
-          m = minimax(h - 1, false, vA, vB);
+          m = minimax(h, false, vA, vB);
           value = -m.value;
      
           // zwyciestwo w k ruchach jest lepsze niz w k + 1 ruchach
@@ -386,10 +394,11 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
       
           // wynik jest dokladny, tylko wtedy gdy miesci sie w oknie
           if (-vB <= value && value <= -vA && !terminateAI)
-            table.update(value, h - 1, moveCount, m);
-        }
+            table.update(value, h, moveCount, m);
       
-      undo();
+          undo();
+        }
+
       
       // aktualizowanie najlepszego ruchu
       if (value > best.value)

@@ -95,7 +95,7 @@ void AICarbon::OXCell::update4()
 }
 // ----------------------------------------------------------------------------
 // xp, yp in <4, boardSize + 4)
-void AICarbon::_move(int xp, int yp)
+void AICarbon::_move(int xp, int yp, bool updateHash)
 {
   nSearched++;
 
@@ -158,7 +158,7 @@ void AICarbon::_move(int xp, int yp)
   cell[xp - 2][yp + 2].adj2++; cell[xp    ][yp + 2].adj2++; cell[xp + 2][yp + 2].adj2++;
 
   // aktualizowanie mieszania
-  table.move(xp, yp, who);
+  if(updateHash) table.move(xp, yp, who);
 
   // zamiana graczy    
   who = OPPONENT(who);
@@ -250,7 +250,7 @@ int AICarbon::undo(int x, int y)
   }
   return 1;
 }
-
+// ----------------------------------------------------------------------------
 bool AICarbon::check()
 {
   int n[2][9];

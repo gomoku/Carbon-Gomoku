@@ -50,7 +50,7 @@ class AICarbon : public OXPlayer
     void start(int width, int height);
     void move(int x, int y);
     void yourTurn(int &x, int &y, int depth = 0, int time = 0);
-    void undo(); 
+    void undo();
     int undo(int x, int y);
     const char* name() const {return "AICarbon";}
     AICarbon(){ init(); }
@@ -79,8 +79,8 @@ class AICarbon : public OXPlayer
     friend  struct OXCell;
     
     // ------------------------------------------------------------------------
-    void    _move(int x, int y);   // wykonanie ruchu, wspolrzedne w <4, boardSize + 3>
-    
+    void    _move(int x, int y, bool updateHash = true);   // wykonanie ruchu, wspolrzedne w <4, boardSize + 3>
+
     // funkcje inicjujace
     void    init();                       // inicjacja tablic, korzysta z funkcji get*()
     int     getRank   (char cfg);   

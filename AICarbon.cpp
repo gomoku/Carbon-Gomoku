@@ -317,19 +317,19 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
 
   // szybkie rozpoznawanie zakonczenia
   int q = quickWinSearch();
-  if (root == false && q != 0)
-    {
-      if (q > 0) return OXMove(0, 0, +WIN_MAX - q);
-      if (q < 0) return OXMove(0, 0, -WIN_MAX - q);
-    }
-  else if (q == 1)
-    {
-      // wykonywanie ruchu wygrywajacego
-      FOR_EVERY_CAND(x, y)
-        if (cell[x][y].status4[who] == A)
-          return OXMove(x, y, WIN_MAX - 1);
-    }
-  
+  if(q != 0)
+  {
+    if (!root) 
+      return OXMove(0, 0, (q > 0 ? +WIN_MAX : -WIN_MAX) - q);
+    if (q == 1)
+      {
+        // wykonywanie ruchu wygrywajacego
+        FOR_EVERY_CAND(x, y)
+          if (cell[x][y].status4[who] == A)
+            return OXMove(x, y, WIN_MAX - 1);
+      }
+  }
+
   // ocenianie sytuacji
   if (h == 0)
     {
@@ -344,15 +344,19 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
 
   // generowanie kandydatow
   generateCand(cnd, nCnd);
-  if (root && nCnd == 1) return OXMove(cnd[0].x, cnd[0].y, 0);
-  qsort(cnd, nCnd, sizeof(OXCand), candComp);
- 
-  // dla prawie pelnej planszy, nie odrzucamy zadnego kandydata
-  if (nCnd == 0)
-    {
-      FOR_EVERY_CAND(x, y) cnd[nCnd++] = OXCand(x, y, 0);
-      if(nCnd == 0) best.value = 0; //board is full
-    }
+  if(nCnd > 1){
+    qsort(cnd, nCnd, sizeof(OXCand), candComp);
+  }
+  else if(nCnd == 1)
+  {
+    if(root) return OXMove(cnd[0].x, cnd[0].y, 0);
+  }
+  else //(nCnd == 0)
+  {
+    // dla prawie pelnej planszy, nie odrzucamy zadnego kandydata
+    FOR_EVERY_CAND(x, y) cnd[nCnd++] = OXCand(x, y, 0);
+    if(nCnd == 0) best.value = 0; //board is full
+  }
 
   // symulowanie ruchow
   for (i = 0; i < nCnd; i++)
@@ -364,7 +368,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
       if(table.present() && (table.depth() >= h && ((table.depth() ^ h)&1)==0 || abs(table.value()) >= WIN_MIN))
         {
           nSearched++;
-          assert(table.moves() == moveCount);
+          assert(table.moves() == moveCount + 1);
           value = table.value();  // ten przypadek jest juz obliczony
 
           table.undo(cnd[i].x, cnd[i].y, who);

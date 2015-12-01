@@ -361,7 +361,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
 
       assert(best.value <= beta);
       
-      if (table.present() && table.depth() == h)
+      if(table.present() && (table.depth() >= h && ((table.depth() ^ h)&1)==0 || abs(table.value()) >= WIN_MIN))
         {
           nSearched++;
           assert(table.moves() == moveCount);

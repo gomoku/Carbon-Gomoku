@@ -2,6 +2,6 @@
 #define _RANDOM
 
 void _randomize();      // inicjacja generatora
-int  _random(int x);    // zwraca liczbe z przedzialu 0..x-1
+unsigned _random(unsigned x);    // zwraca liczbe z przedzialu 0..x-1
 
 #endif

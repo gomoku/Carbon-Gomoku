@@ -1,16 +1,17 @@
-#include "Random.h"
+#include <windows.h>
 
-#include <stdlib.h>
-#include <time.h>
+// We can't use standard function rand() from stdlib because it does not work.
+// It returns same value for every move because OXMain.cpp creates new thread for every move.
+
+static DWORD seed;
 
 void _randomize()
 {
-  time_t t;
-  time(&t);
-  srand((unsigned int)t);
+  seed = GetTickCount();
 }
 
-int  _random(int x)
+unsigned _random(unsigned x)
 {
-  return x * rand() / RAND_MAX;
+  seed = seed * 367413989 + 174680251;
+  return (unsigned)(UInt32x32To64(x, seed) >> 32);
 }

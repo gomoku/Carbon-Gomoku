@@ -104,6 +104,8 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
     return;
   }
 
+  if(databaseMove(x, y)) return;
+
   if(time > 0) info_timeout_turn = time * 1000;
 
   if(depth > 0)

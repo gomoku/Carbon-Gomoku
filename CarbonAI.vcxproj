@@ -156,6 +156,7 @@
     <ClCompile Include="AICarbon.cpp" />
     <ClCompile Include="AICarbonMove.cpp" />
     <ClCompile Include="AIwrapper.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClInclude Include="CONFIG.CPP">
       <FileType>CppCode</FileType>
     </ClInclude>

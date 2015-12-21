@@ -86,6 +86,7 @@ class AICarbon : public OXPlayer
     int     getRank   (char cfg);   
     int     getPrior  (UCHAR a, UCHAR b);
     UCHAR   getStatus4(UCHAR s0, UCHAR s1, UCHAR s2, UCHAR s3);
+    bool    databaseMove(int &x0, int &y0);
 
 
     // ------------------------------------------------------------------------

@@ -70,7 +70,7 @@ void AICarbon::start(int width, int height)
   totalSearched = 0;
   who = OP;
   opp = XP;
-  moveCount = 0;
+  moveCount = remCount = 0;
   
   upperLeftCand = OXPoint(99, 99);
   lowerRightCand = OXPoint(0, 0);
@@ -110,11 +110,12 @@ void AICarbon::_move(int xp, int yp, bool updateHash)
   nSt[1][cell[xp][yp].status4[1]]--;
   
   cell[xp][yp].piece = who;
-  remCell[moveCount] = &cell[xp][yp];
+  remCell[remCount] = &cell[xp][yp];
   remMove[moveCount] = OXPoint(xp, yp);
-  remULCand[moveCount] = upperLeftCand;
-  remLRCand[moveCount] = lowerRightCand;
+  remULCand[remCount] = upperLeftCand;
+  remLRCand[remCount] = lowerRightCand;
   moveCount++;
+  remCount++;
 
   if(xp - 2 < upperLeftCand.x) upperLeftCand.x = __max(xp - 2, 4);
   if(yp - 2 < upperLeftCand.y) upperLeftCand.y = __max(yp - 2, 4);
@@ -179,12 +180,13 @@ void AICarbon::undo()
   assert(check());
 
   moveCount--;
+  remCount--;
   xp = remMove[moveCount].x;
   yp = remMove[moveCount].y;
-  upperLeftCand = remULCand[moveCount];
-  lowerRightCand = remLRCand[moveCount];
+  upperLeftCand = remULCand[remCount];
+  lowerRightCand = remLRCand[remCount];
 
-  OXCell* c = remCell[moveCount];
+  OXCell* c = remCell[remCount];
   c->update1(0);
   c->update1(1);
   c->update1(2);
@@ -194,6 +196,7 @@ void AICarbon::undo()
   nSt[0][c->status4[0]]++;
   nSt[1][c->status4[1]]++;
   
+  assert(c->piece == OP || c->piece == XP);
   c->piece = EMPTY;
   
   // zamiana graczy    
@@ -252,6 +255,61 @@ int AICarbon::undo(int x, int y)
     return 0;
   }
   return 1;
+}
+// ----------------------------------------------------------------------------
+void AICarbon::block(int x, int y)
+{
+  int xp, yp, k;
+  UCHAR p;
+
+  xp = x+4; yp = y+4;
+
+  assert(check());
+  nSt[0][cell[xp][yp].status4[0]]--;
+  nSt[1][cell[xp][yp].status4[1]]--;
+
+  cell[xp][yp].piece = WRONG;
+  remMove[moveCount] = OXPoint(xp, yp);
+  moveCount++;
+
+  // modyfikowanie <pat> i <points>         
+  for(k = 0; k < 4; k++)
+  {
+    x = xp; y = yp;
+    for(p = 16; p != 0; p <<= 1)
+    {
+      x -= DX[k]; y -= DY[k];
+      cell[x][y].pattern[k][0] |= p;
+      cell[x][y].pattern[k][1] |= p;
+      if(cell[x][y].piece == EMPTY)
+      {
+        cell[x][y].update1(k);
+        nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
+        cell[x][y].update4();
+        nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
+      }
+    }
+    x = xp; y = yp;
+    for(p = 8; p != 0; p >>= 1)
+    {
+      x += DX[k]; y += DY[k];
+      cell[x][y].pattern[k][0] |= p;
+      cell[x][y].pattern[k][1] |= p;
+      if(cell[x][y].piece == EMPTY)
+      {
+        cell[x][y].update1(k);
+        nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
+        cell[x][y].update4();
+        nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
+      }
+    }
+  }
+
+  // zamiana graczy    
+  who = OPPONENT(who);
+  opp = OPPONENT(opp);
+
+  assert(check());
 }
 // ----------------------------------------------------------------------------
 bool AICarbon::check()

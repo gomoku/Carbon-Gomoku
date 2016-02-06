@@ -156,7 +156,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
 int AICarbon::evaluate()
 {
   int a, i, k, p[2] = {0, 0};
-  for (i = 0; i < moveCount; i++)
+  for (i = 0; i < remCount; i++)
     {
       OXCell* c = remCell[i];
       a = c->piece;

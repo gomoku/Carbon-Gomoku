@@ -50,8 +50,12 @@ class AICarbon : public OXPlayer
     void yourTurn(int &x, int &y, int depth = 0, int time = 0);
     void undo();
     int undo(int x, int y);
-    const char* name() const {return "AICarbon";}
+    void block(int x, int y);
+    const char* name() const { return "AICarbon"; }
     AICarbon(){ init(); }
+#ifdef DEBUG_EVAL
+    void eval(int x, int y);
+#endif
 
   private:
     static const int WIN_MIN;  // wygrana w bardzo wielu ruchach
@@ -107,6 +111,7 @@ class AICarbon : public OXPlayer
     OXCell  cell[MAX_BOARD_WIDTH + 8][MAX_BOARD_HEIGHT + 8]; // tablica pol    
     int     boardWidth, boardHeight;  // rozmiar planszy
     int     moveCount;  // liczba wykonanych ruchow
+    int     remCount;   // remCell length
     OXPiece who, opp;   // who, opp - aktualny i nastepny gracz 
     int     nSt[2][9];  // nSt[i][j] - liczba pol o statusie j gracza i
   

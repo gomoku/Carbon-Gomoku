@@ -1,5 +1,6 @@
 #include "pisqpipe.h"
 #include <windows.h>
+#include <stdio.h>
 #include "AICarbon.h"
 
 const char *infotext="name=\"Carbon\", author=\"Michal Czardybon\", version=\"2.2\", country=\"Poland\", www=\"http://mczard.republika.pl/gomoku.en.html\"";
@@ -43,7 +44,7 @@ void brain_opponents(int x, int y)
 
 void brain_block(int x, int y)
 {
-  pipeOut("ERROR brain_block not implemented");
+  ai->block(x, y);
 }
 
 int brain_takeback(int x, int y)
@@ -74,3 +75,46 @@ long getTime()
 { 
   return (long)GetTickCount();
 }
+
+#ifdef DEBUG_EVAL
+
+void brain_eval(int x, int y)
+{
+  ai->eval(x, y);
+}
+
+static HWND wnd = FindWindowA("Piskvork", 0);
+
+static void vprint(int x, int y, int w, char *format, va_list va)
+{
+  HDC dc = GetDC(wnd);
+  RECT rc;
+  rc.top = y;
+  rc.bottom = y+16;
+  rc.left = x - w/2;
+  rc.right = rc.left + w;
+  char buf[128];
+  int n = vsprintf(buf, format, va);
+  SetTextAlign(dc, TA_CENTER);
+  ExtTextOutA(dc, x, y, ETO_OPAQUE, &rc, buf, n, 0);
+  ReleaseDC(wnd, dc);
+}
+
+static void printXY(int x, int y, int w, char *format, ...)
+{
+  va_list va;
+  va_start(va, format);
+  vprint(x, y, w, format, va);
+  va_end(va);
+}
+
+void AICarbon::eval(int x, int y)
+{
+  OXCell *c = &cell[x+4][y+4];
+  printXY(300, 0, 60, " [%d,%d,%d,%d],[%d,%d,%d,%d] ", 
+    c->status1[0][0], c->status1[1][0], c->status1[2][0], c->status1[3][0], 
+    c->status1[0][1], c->status1[1][1], c->status1[2][1], c->status1[3][1]);
+  printXY(300, 16, 60, "%d,%d", c->status4[0], c->status4[1]);
+  printXY(300, 32, 60, "%d", c->prior());
+}
+#endif

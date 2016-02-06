@@ -51,6 +51,7 @@ class AICarbon : public OXPlayer
     void undo();
     int undo(int x, int y);
     void block(int x, int y);
+    void setWho(OXPiece _who);
     const char* name() const { return "AICarbon"; }
     AICarbon(){ init(); }
 #ifdef DEBUG_EVAL

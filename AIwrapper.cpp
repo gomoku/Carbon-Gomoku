@@ -34,11 +34,13 @@ void brain_restart()
 
 void brain_my(int x, int y)
 {
+  ai->setWho(XP);
   ai->move(x, y);
 }
 
 void brain_opponents(int x, int y)
 {
+  ai->setWho(OP);
   ai->move(x, y);
 }
 
@@ -55,6 +57,7 @@ int brain_takeback(int x, int y)
 void brain_turn()
 {
   int x, y;
+  ai->setWho(XP);
   ai->yourTurn(x, y);
   ai->move(x, y);
   pipeOut("%d,%d", x, y);

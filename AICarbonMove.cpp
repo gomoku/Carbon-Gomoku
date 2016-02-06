@@ -85,6 +85,12 @@ void AICarbon::move(int xp, int yp)
   _move(xp + 4, yp + 4);
 }
 // ----------------------------------------------------------------------------
+void AICarbon::setWho(OXPiece _who)
+{
+  who = _who;
+  opp = OPPONENT(who);
+}
+// ----------------------------------------------------------------------------
 inline void AICarbon::OXCell::update1(int k)
 {
   status1[k][0] = STATUS1[ pattern[k][0] ][ pattern[k][1] ]; 

@@ -361,7 +361,7 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   else //(nCnd == 0)
   {
     // dla prawie pelnej planszy, nie odrzucamy zadnego kandydata
-    FOR_EVERY_CAND(x, y) cnd[nCnd++] = OXCand(x, y, 0);
+    FOR_EVERY_CAND(x, y) if(nCnd < MAX_CAND) cnd[nCnd++] = OXCand(x, y, 0);
     if(nCnd == 0) best.value = 0; //board is full
   }
 

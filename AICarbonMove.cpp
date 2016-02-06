@@ -2,6 +2,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include "Random.h"
+#include "STATUS1.CPP"
+
 // ----------------------------------------------------------------------------
 // Podstawowe funkcje
 // ----------------------------------------------------------------------------
@@ -82,6 +84,7 @@ void AICarbon::start(int width, int height)
 void AICarbon::move(int xp, int yp)
 {
   table.resize(1);
+  initExact5();
   _move(xp + 4, yp + 4);
 }
 // ----------------------------------------------------------------------------
@@ -89,6 +92,33 @@ void AICarbon::setWho(OXPiece _who)
 {
   who = _who;
   opp = OPPONENT(who);
+}
+// ----------------------------------------------------------------------------
+void AICarbon::initExact5()
+{
+  int i, j, k;
+  unsigned a, b, v;
+  char y;
+  static int last_exact5 = 0;
+
+  if(info_exact5==last_exact5) return;
+  last_exact5 = info_exact5;
+
+  y = info_exact5 ? 0 : 9;
+  for(i = 0; i < 4; i++)
+  {
+    for(j = 0; j < 8; j++)
+    {
+      v = 0xf8 | j;
+      a = ((v >> i) | (v << (8-i))) & 0xff;
+      for(k = 0; k < 8; k++)
+      {
+        b = ((k >> i) | (k << (8-i))) & 0xff;
+        assert(STATUS1[a][b] == 0 || STATUS1[a][b] == 9);
+        STATUS1[a][b] = y;
+      }
+    }
+  }
 }
 // ----------------------------------------------------------------------------
 inline void AICarbon::OXCell::update1(int k)

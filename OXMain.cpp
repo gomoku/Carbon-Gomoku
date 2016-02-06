@@ -21,6 +21,7 @@
 int info_timeout_turn=1000; /* time for one turn in milliseconds */
 int info_time_left=1000000000; /* left time for a game */
 int info_max_memory=350000000; /* maximum memory in bytes */
+int info_exact5=0;
 int terminateAI;
 
 int va, vb;

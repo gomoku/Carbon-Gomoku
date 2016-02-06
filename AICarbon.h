@@ -14,11 +14,6 @@
 
 #include "AICarbonHash.h"
 
-#include "CONFIG.CPP"
-#include "COUNT5.CPP"
-#include "STATUS1.CPP"
-#include "PRIOR3.CPP"
-
 enum LNUM {A = 8, B = 7, C = 6, D = 5, E = 4, F = 3, G = 2, H = 1};
 
 // makro imitujace petle, w ktorej przypisuje wartoscia zmiannych x, y typu
@@ -89,6 +84,7 @@ class AICarbon : public OXPlayer
     int     getRank   (char cfg);   
     int     getPrior  (UCHAR a, UCHAR b);
     UCHAR   getStatus4(UCHAR s0, UCHAR s1, UCHAR s2, UCHAR s3);
+    void    initExact5();
     bool    databaseMove(int &x0, int &y0);
 
 
@@ -144,7 +140,7 @@ class AICarbon : public OXPlayer
     long stopTime();
 };
 
-extern int info_timeout_turn, info_time_left;
+extern int info_timeout_turn, info_time_left, info_exact5;
 extern int terminateAI;
 extern long getTime();
 

@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "CONFIG.CPP"
+#include "COUNT5.CPP"
+#include "PRIOR3.CPP"
+
 #define MATCH_SPARE 7      //how much is time spared for the rest of game
 #define TIMEOUT_PREVENT 5  //how much is minimax slower when the depth is increased
 
@@ -96,6 +100,7 @@ void AICarbon::yourTurn(int &x, int &y, int depth, int time)
   start_time = getTime();
   int turnSearched = 0;
   table.resize(50000);
+  initExact5();
 
   if(moveCount == 0)
   {

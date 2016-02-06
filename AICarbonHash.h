@@ -53,7 +53,7 @@ public:
     // uwzglednij wykonanie ruchu
     void move(int x, int y, OXPiece who)
     {
-      int offset = x + (y << 5) + (who << 10);
+      int offset = x + (y << 6) + (who << 11);
       hashA = (hashA + hashValA[offset]) % hashASize;
       currentItem = &elem[hashA];
       hashB = (hashB + hashValB[offset]);
@@ -63,7 +63,7 @@ public:
     // cofanie <move>
     void undo(int x, int y, OXPiece who)
     {
-      int offset = x + (y << 5) + (who << 10);
+      int offset = x + (y << 6) + (who << 11);
       hashA = ((int)(hashA - hashValA[offset]) % (int)hashASize);
       if((int)hashA < 0) hashA += hashASize;
       currentItem = &elem[hashA];
@@ -119,7 +119,7 @@ public:
       elem = 0;
 
 #ifndef NDEBUG
-      for(int n = 0; n < 2048; n++) assert(hashValA[n] < 2000000000);
+      for(int n = 0; n < 4096; n++) assert(hashValA[n] < 2000000000);
 #endif
     }
 

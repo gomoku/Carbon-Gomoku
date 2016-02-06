@@ -17,7 +17,7 @@ class OXGame
 {
   public:
     OXGame();
-    void    start(int bsize = 19); // new game
+    void    start(int bsize); // new game
     bool    move(int x, int y);    
     void    undo();
     OXPiece cell(int x, int y) const;
@@ -30,9 +30,9 @@ class OXGame
     OXPiece winner()           const {return _winner;}
     
   private:
-    OXPiece   _cell[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
+    OXPiece   _cell[MAX_BOARD_WIDTH][MAX_BOARD_HEIGHT];
     OXPiece   _player;
-    OXPoint   _move[MAX_BOARD_SIZE * MAX_BOARD_SIZE];
+    OXPoint   _move[MAX_CELLS];
     int       _moveCount;
     int       _boardSize;
     bool      _finished;

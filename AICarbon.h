@@ -21,8 +21,6 @@
 
 enum LNUM {A = 8, B = 7, C = 6, D = 5, E = 4, F = 3, G = 2, H = 1};
 
-const int BSIZE = MAX_BOARD_SIZE + 8;
-
 // makro imitujace petle, w ktorej przypisuje wartoscia zmiannych x, y typu
 // short wspolrzedne kolejnych kandydatow na ruch
 #define FOR_EVERY_CAND(x, y) \
@@ -106,7 +104,7 @@ class AICarbon : public OXPlayer
        
     // ------------------------------------------------------------------------
     // stan gry
-    OXCell  cell[ BSIZE ][ BSIZE ]; // tablica pol    
+    OXCell  cell[MAX_BOARD_WIDTH + 8][MAX_BOARD_HEIGHT + 8]; // tablica pol    
     int     boardWidth, boardHeight;  // rozmiar planszy
     int     moveCount;  // liczba wykonanych ruchow
     OXPiece who, opp;   // who, opp - aktualny i nastepny gracz 

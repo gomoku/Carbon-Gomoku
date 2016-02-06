@@ -10,10 +10,11 @@
 #define _OXTYPES
 
 // maksymalny rozmiar planszy
-const int MAX_BOARD_SIZE = 32;
+const int MAX_BOARD_WIDTH = 64;
+const int MAX_BOARD_HEIGHT = 32;
 
 // maksymalna liczba pol / ruchow
-const int MAX_CELLS = MAX_BOARD_SIZE * MAX_BOARD_SIZE;
+const int MAX_CELLS = MAX_BOARD_WIDTH * MAX_BOARD_HEIGHT;
 
 typedef unsigned char  UCHAR;
 typedef unsigned short USHORT;

@@ -13,8 +13,12 @@ void brain_init()
     pipeOut("ERROR Invalid size of the board");
     return;
   }
-  if(width > MAX_BOARD_SIZE || height>MAX_BOARD_SIZE){
-    pipeOut("ERROR Maximal board size is %d", MAX_BOARD_SIZE);
+  if(width > MAX_BOARD_WIDTH){
+    pipeOut("ERROR Maximal board width is %d", MAX_BOARD_WIDTH);
+    return;
+  }
+  if(height > MAX_BOARD_HEIGHT){
+    pipeOut("ERROR Maximal board height is %d", MAX_BOARD_HEIGHT);
     return;
   }
   brain_restart();

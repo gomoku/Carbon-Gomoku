@@ -15,10 +15,7 @@
 #include <assert.h>
 #include "OXTypes.h"
 
-#include "hashValA.cpp"
-#include "hashValB.cpp"
-#include "hashValC.cpp"
-
+extern const ULONG hashValA[4096], hashValB[4096], hashValC[4096];
 extern int info_max_memory;
 
 class HashTable

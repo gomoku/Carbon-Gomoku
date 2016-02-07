@@ -8,6 +8,9 @@
 #include "CONFIG.CPP"
 #include "COUNT5.CPP"
 #include "PRIOR3.CPP"
+#include "hashValA.cpp"
+#include "hashValB.cpp"
+#include "hashValC.cpp"
 
 #define MATCH_SPARE 7      //how much is time spared for the rest of game
 #define TIMEOUT_PREVENT 5  //how much is minimax slower when the depth is increased
@@ -221,7 +224,7 @@ void AICarbon::generateCand(OXCand *cnd, int &nCnd)
       // ogranicza ruchy do 
       nCnd = 0;
       FOR_EVERY_CAND(x, y)
-        if (cell[x][y].status4[who] >= E || cell[x][y].status4[opp] >= E)
+        if(cell[x][y].status4[who] >= E && cell[x][y].status4[who] != FORBID || cell[x][y].status4[opp] >= E && cell[x][y].status4[opp] != FORBID)
           {
             cnd[nCnd].x = x;
             cnd[nCnd].y = y;
@@ -246,6 +249,8 @@ int AICarbon::quickWinSearch()
       FOR_EVERY_CAND(x, y)
         if (cell[x][y].status4[opp] == A)
           {
+            if(info_renju && who==firstPlayer && cell[x][y].status4[who] == FORBID) return -2; //cannot defend
+
             _move(x, y);
             q = -quickWinSearch();
             undo();
@@ -260,7 +265,7 @@ int AICarbon::quickWinSearch()
       if (nSt[opp][B] == 0 && nSt[opp][C] == 0 && nSt[opp][D] == 0 && nSt[opp][E] == 0) return 5;
       // analizuj jeszcze jeden ruch
       FOR_EVERY_CAND(x, y)
-        if (cell[x][y].status4[who] == C) 
+        if (cell[x][y].status4[who] == C)
           {
             _move(x, y);
             q = -quickWinSearch();
@@ -360,14 +365,22 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
   }
   else //(nCnd == 0)
   {
+    noCand:
     // dla prawie pelnej planszy, nie odrzucamy zadnego kandydata
     FOR_EVERY_CAND(x, y) if(nCnd < MAX_CAND) cnd[nCnd++] = OXCand(x, y, 0);
     if(nCnd == 0) best.value = 0; //board is full
   }
 
+  int nForbid = 0;
+
   // symulowanie ruchow
   for (i = 0; i < nCnd; i++)
     {
+      if(info_renju && who==firstPlayer && cell[cnd[i].x][cnd[i].y].status4[who] == FORBID){
+        nForbid++;
+        continue;
+      }
+
       table.move(cnd[i].x, cnd[i].y, who);
 
       assert(best.value <= beta);
@@ -420,6 +433,11 @@ OXMove AICarbon::minimax(int h, bool root, int alpha, int beta)
 
       if(terminateAI) break;
     }
+
+  if(info_renju && nForbid==nCnd){
+    nCnd = 0;
+    goto noCand;
+  }
   return best;
 }
 // ----------------------------------------------------------------------------

@@ -67,7 +67,7 @@ void AICarbon::start(int width, int height)
       }
   // rozne inicjacje
   int i, j;
-  for (i = 0; i < 2; i++) for (j = 0; j < 9; j++) nSt[i][j] = 0;
+  for (i = 0; i < 2; i++) for (j = 0; j < 10; j++) nSt[i][j] = 0;
 
   totalSearched = 0;
   who = OP;
@@ -92,6 +92,7 @@ void AICarbon::setWho(OXPiece _who)
 {
   who = _who;
   opp = OPPONENT(who);
+  if(moveCount==0) firstPlayer = _who;
 }
 // ----------------------------------------------------------------------------
 void AICarbon::initExact5()
@@ -171,6 +172,7 @@ void AICarbon::_move(int xp, int yp, bool updateHash)
               cell[x][y].update1(k);
               nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
               cell[x][y].update4();
+              if(info_renju) checkForbid(x, y);
               nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
             }
         }
@@ -184,6 +186,7 @@ void AICarbon::_move(int xp, int yp, bool updateHash)
               cell[x][y].update1(k);
               nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
               cell[x][y].update4();
+              if(info_renju) checkForbid(x, y);
               nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
             }
         }
@@ -228,6 +231,7 @@ void AICarbon::undo()
   c->update1(2);
   c->update1(3);
   c->update4();
+  if(info_renju) checkForbid(xp, yp);
 
   nSt[0][c->status4[0]]++;
   nSt[1][c->status4[1]]++;
@@ -255,6 +259,7 @@ void AICarbon::undo()
               cell[x][y].update1(k);
               nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
               cell[x][y].update4();
+              if(info_renju) checkForbid(x, y);
               nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
             }
         }
@@ -268,6 +273,7 @@ void AICarbon::undo()
               cell[x][y].update1(k);
               nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
               cell[x][y].update4();
+              if(info_renju) checkForbid(x, y);
               nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
             }
         }
@@ -322,6 +328,7 @@ void AICarbon::block(int x, int y)
         cell[x][y].update1(k);
         nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
         cell[x][y].update4();
+        if(info_renju) checkForbid(x, y);
         nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
       }
     }
@@ -336,6 +343,7 @@ void AICarbon::block(int x, int y)
         cell[x][y].update1(k);
         nSt[0][cell[x][y].status4[0]]--; nSt[1][cell[x][y].status4[1]]--;
         cell[x][y].update4();
+        if(info_renju) checkForbid(x, y);
         nSt[0][cell[x][y].status4[0]]++; nSt[1][cell[x][y].status4[1]]++;
       }
     }
@@ -348,18 +356,65 @@ void AICarbon::block(int x, int y)
   assert(check());
 }
 // ----------------------------------------------------------------------------
+void AICarbon::checkForbid(int x, int y)
+{
+  int k, n, s, x1, y1, n3, n4, n6;
+
+  OXCell *c = &cell[x][y];
+  if(c->status4[firstPlayer] < F) return;
+
+  if(c->status4[firstPlayer] == A)
+  {
+    n6 = 0;
+    for(k = 0; k < 4; k++)
+    {
+      if(c->status1[k][firstPlayer] >= 9)
+      {
+        n = -1;
+        x1 = x; y1 = y;
+        do{
+          x1 -= DX[k]; y1 -= DY[k];
+          n++;
+        } while(cell[x1][y1].piece == firstPlayer);
+        x1 = x; y1 = y;
+        do{
+          x1 += DX[k]; y1 += DY[k];
+          n++;
+        } while(cell[x1][y1].piece == firstPlayer);
+        if(n>=5){
+          if(n==5) return; //five in a row
+          n6++;
+        }
+      }
+    }
+    if(n6>0) //overline
+      c->status4[firstPlayer] = FORBID;
+    return;
+  }
+
+  n3 = n4 = 0;
+  for(k = 0; k < 4; k++)
+  {
+    s = c->status1[k][firstPlayer];
+    if(s>=7) n4++;
+    else if(s>=6) n3++;
+  }
+  if(n4>1 || n3>1) //double-four or double-three
+    c->status4[firstPlayer] = FORBID;
+}
+// ----------------------------------------------------------------------------
 bool AICarbon::check()
 {
-  int n[2][9];
+  int n[2][10];
   int i, j, x, y;
-  for (i = 0; i <= 1; i++) for (j = 0; j < 9; j++) n[i][j] = 0;
+  for (i = 0; i <= 1; i++) for (j = 0; j < 10; j++) n[i][j] = 0;
   FOR_EVERY_CAND(x, y)
     {
       n[0][cell[x][y].status4[0]]++;
       n[1][cell[x][y].status4[1]]++;
     }
   for (i = 0; i < 2; i++)
-    for (j = 1; j < 9; j++)
+    for (j = 1; j < 10; j++)
       if (n[i][j] != nSt[i][j]) return false;
   return true;
 }

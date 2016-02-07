@@ -14,7 +14,7 @@
 
 #include "AICarbonHash.h"
 
-enum LNUM {A = 8, B = 7, C = 6, D = 5, E = 4, F = 3, G = 2, H = 1};
+enum LNUM {A = 8, B = 7, C = 6, D = 5, E = 4, F = 3, G = 2, H = 1, FORBID = 9};
 
 // makro imitujace petle, w ktorej przypisuje wartoscia zmiannych x, y typu
 // short wspolrzedne kolejnych kandydatow na ruch
@@ -93,6 +93,7 @@ class AICarbon : public OXPlayer
 
     // ocena biezacej sytuacji
     int     evaluate();
+    void    checkForbid(int x, int y);
 
     // glowna funkcja przeszukujaca ruchy
     OXMove  minimax(int h, bool root, int alpha, int beta);   
@@ -110,7 +111,8 @@ class AICarbon : public OXPlayer
     int     moveCount;  // liczba wykonanych ruchow
     int     remCount;   // remCell length
     OXPiece who, opp;   // who, opp - aktualny i nastepny gracz 
-    int     nSt[2][9];  // nSt[i][j] - liczba pol o statusie j gracza i
+    OXPiece firstPlayer;// player who begins
+    int     nSt[2][10];  // nSt[i][j] - liczba pol o statusie j gracza i
   
     // ------------------------------------------------------------------------
     // history stack
@@ -140,7 +142,7 @@ class AICarbon : public OXPlayer
     long stopTime();
 };
 
-extern int info_timeout_turn, info_time_left, info_exact5;
+extern int info_timeout_turn, info_time_left, info_exact5, info_renju;
 extern int terminateAI;
 extern long getTime();
 

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "AICarbon.h"
 
-const char *infotext="name=\"Carbon\", author=\"Michal Czardybon\", version=\"2.2\", country=\"Poland\", www=\"http://mczard.republika.pl/gomoku.en.html\"";
+const char *infotext="name=\"Carbon\", author=\"Michal Czardybon\", version=\"2.3\", country=\"Poland\", www=\"http://mczard.republika.pl/gomoku.en.html\"";
 
 AICarbon *ai;
 

@@ -542,7 +542,8 @@ bool AICarbon::databaseMove(int &x0, int &y0)
           case 6: x = left + y1; y = bottom - x1; break;
           default: x = right - y1; y = bottom - x1; break;
         }
-        if(x - 4 < 0 || x - 4 >= boardWidth || y - 4 < 0 || y - 4 >= boardHeight) break;
+        const int B = 4; //distance from border
+        if(x - 4 < B || x - 4 >= boardWidth - B || y - 4 < B || y - 4 >= boardHeight - B) break;
         if(i == len1){
           x0 = x - 4; 
           y0 = y - 4;
